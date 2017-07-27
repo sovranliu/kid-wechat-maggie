@@ -1,6 +1,6 @@
 package com.xyzq.kid.wechat.action;
 
-import com.xyzq.kid.logic.service.DemoService;
+import com.xyzq.kid.logic.user.service.DemoService;
 import com.xyzq.simpson.base.json.JSONObject;
 import com.xyzq.simpson.maggie.access.spring.MaggieAction;
 import com.xyzq.simpson.maggie.framework.Context;
