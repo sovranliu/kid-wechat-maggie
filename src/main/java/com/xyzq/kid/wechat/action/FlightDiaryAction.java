@@ -84,7 +84,7 @@ public class FlightDiaryAction implements IAction {
         TicketEntity ticketEntity = ticketService.getTicketsInfoBySerialno(serialNumber);
         if (ticketEntity == null) {
             context.set("code", "1");
-            context.set("msg", "飞行票serialNumber不存在1");
+            context.set("msg", "飞行票serialNumber不存在!");
             return "success.json";
         }
         List<RecordEntity> canPurchaseList = recordService.findBy(ticketEntity.id, RecordEntity.UNPURCHASED);
