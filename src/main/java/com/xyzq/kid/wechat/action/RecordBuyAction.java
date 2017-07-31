@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 /**
  *
  */
-@MaggieAction(path = "kid/console/recordBuy")
+@MaggieAction(path = "kid/wechat/recordBuy")
 public class RecordBuyAction implements IAction {
     /**
      * Action中只支持Autowired注解引入SpringBean
