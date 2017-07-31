@@ -48,11 +48,11 @@ public class GetBookAbleNum extends CustomerAction {
 				BookTimeRepository repo=bookRepositoryService.queryRepositoryByDateAndTimeSpan(bookDate, bs.getId());
 				bookAbleNum=String.valueOf(repo.getBookamount());
 			}
+			Map<String,String> map=new HashMap<>();
+			map.put("count", bookAbleNum);
+			context.set("code", 0);
+			context.set("data", gson.toJson(map));
 		}
-		Map<String,String> map=new HashMap<>();
-		map.put("count", bookAbleNum);
-		context.set("code", 0);
-		context.set("data", gson.toJson(map));
 		return "success.json";
 	}
 	

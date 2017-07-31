@@ -4,11 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.mysql.jdbc.StringUtils;
 import com.xyzq.kid.common.action.CustomerAction;
+import com.xyzq.kid.logic.book.dao.po.Book;
 import com.xyzq.kid.logic.book.dao.po.BookTimeRepository;
 import com.xyzq.kid.logic.book.dao.po.BookTimeSpan;
+import com.xyzq.kid.logic.book.service.BookChangeRequestService;
 import com.xyzq.kid.logic.book.service.BookRepositoryService;
 import com.xyzq.kid.logic.book.service.BookService;
 import com.xyzq.kid.logic.book.service.BookTimeSpanService;
+import com.xyzq.kid.logic.ticket.entity.TicketEntity;
 import com.xyzq.kid.logic.ticket.service.TicketService;
 import com.xyzq.kid.logic.user.entity.UserEntity;
 import com.xyzq.kid.logic.user.service.UserService;
@@ -32,6 +35,9 @@ public class SubmitBooking extends CustomerAction {
 	BookTimeSpanService bookTimeSpanService;
 	
 	@Autowired
+	BookChangeRequestService bookChangeRequestService;
+	
+	@Autowired
 	BookService bookService;
 
 	@Override
@@ -48,16 +54,27 @@ public class SubmitBooking extends CustomerAction {
 		String day=(String)context.parameter("day");
 		String start=(String)context.parameter("start");
 		String end=(String)context.parameter("end");
+		String type=(String)context.parameter("type");//0：预约提交，1：预约改期
+		TicketEntity ticket=ticketService.getTicketsInfoBySerialno(serialNumber);
 		if(!StringUtils.isNullOrEmpty(year)&&!StringUtils.isNullOrEmpty(month)&&!StringUtils.isNullOrEmpty(day)){
 			String bookDate=year+"-"+month+"-"+day;
 			String timeSpan=start+"-"+end;
 			BookTimeSpan bs=bookTimeSpanService.queryByTimeSpan(timeSpan);
 			if(bs!=null){
 				BookTimeRepository repo=bookRepositoryService.queryRepositoryByDateAndTimeSpan(bookDate, bs.getId());
-				if(bookService.createBook(serialNumber, repo.getId(), user.id)){
-					context.set("code", 0);
-				}else{
-					context.set("code", -9);
+				if(!StringUtils.isNullOrEmpty(type)){
+					if(type.equals("0")){//预约提交
+						if(bookService.createBook(serialNumber, repo.getId(), user.id)){
+							context.set("code", "0");
+						}
+					}else if(type.equals("1")){//改期提交
+						Book book=bookService.queryBookRecByTicketId(ticket.id);
+						if(book!=null){
+							if(bookChangeRequestService.createRequest(book.getId(), "1", null, user.id, repo.getId())){
+								context.set("code", "0");
+							}
+						}
+					}
 				}
 			}
 		}
