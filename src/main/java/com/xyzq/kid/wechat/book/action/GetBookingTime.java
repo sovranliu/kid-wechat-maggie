@@ -55,8 +55,10 @@ public class GetBookingTime extends CustomerAction {
 				}
 			}
 		}
-		context.set("code", 0);
-		context.set("data", gson.toJson(spanList));
+		if(spanList.size()>0){
+			context.set("code", 0);
+			context.set("data", gson.toJson(spanList));
+		}
 		return "success.json";
 	}
 
