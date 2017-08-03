@@ -30,7 +30,7 @@ public class FlightDiaryAction implements IAction {
     @Autowired
     private TicketService ticketService;
 /*
-    ## serialNumber  票号流水
+    ## serialNo  票号流水
     ## timeDuration  飞行总时长
     ## canPurchase  当前可购买的飞行日志，包含［总价格］和［各视频］
             ## hasPurchased  已购买的飞行日志
@@ -38,7 +38,7 @@ public class FlightDiaryAction implements IAction {
     {
         "code": 0,
         "data": {
-            "serialNumber": 22030049,
+            "serialNo": 22030049,
             "timeDuration": 15,
             "canPurchase": {
                 "price": "180",
@@ -80,18 +80,18 @@ public class FlightDiaryAction implements IAction {
      */
     @Override
     public String execute(Visitor visitor, Context context) throws Exception {
-        String serialNumber = String.valueOf(context.parameter("serialNumber"));
-        TicketEntity ticketEntity = ticketService.getTicketsInfoBySerialno(serialNumber);
+        String serialNo = String.valueOf(context.parameter("serialNumber"));
+        TicketEntity ticketEntity = ticketService.getTicketsInfoBySerialno(serialNo);
         if (ticketEntity == null) {
             context.set("code", "1");
             context.set("msg", "飞行票serialNumber不存在!");
             return "success.json";
         }
-        List<RecordEntity> canPurchaseList = recordService.findBy(ticketEntity.id, RecordEntity.UNPURCHASED);
-        List<RecordEntity> hasPurchasedList = recordService.findBy(ticketEntity.id, RecordEntity.PURCHASED);
+        List<RecordEntity> canPurchaseList = recordService.findBy(ticketEntity.serialno, RecordEntity.UNPURCHASED);
+        List<RecordEntity> hasPurchasedList = recordService.findBy(ticketEntity.serialno, RecordEntity.PURCHASED);
 
         Map<String, Object> resultMap = new HashMap<>();
-        resultMap.put("serialNumber", serialNumber);
+        resultMap.put("serialNo", serialNo);
         resultMap.put("canPurchase", transToMap(canPurchaseList, context));
         resultMap.put("hasPurchased", transToMap(hasPurchasedList, context));
         resultMap.put("timeDuration", 13);

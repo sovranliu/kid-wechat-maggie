@@ -31,12 +31,11 @@ public class RecordBuyAction implements IAction {
     @Override
     public String execute(Visitor visitor, Context context) throws Exception {
 
-
         context.set("msg", "飞行日志礼物购买成功!");
         context.set("code", "0");
-        if (null != context.parameter("ticketId")) {
-            Integer ticketId = Integer.valueOf(String.valueOf(context.parameter("ticketId")));
-            context.set("data", JSONObject.convertFromObject(recordService.buyRecords(ticketId)));
+        if (null != context.parameter("serialNumber")) {
+            String serialNumber = String.valueOf(context.parameter("serialNumber"));
+            context.set("data", JSONObject.convertFromObject(recordService.buyRecords(serialNumber)));
         }else
         if (null != context.parameter("id")) {
             Integer id = Integer.valueOf(String.valueOf(context.parameter("id")));
