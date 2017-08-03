@@ -1,6 +1,5 @@
 package com.xyzq.kid.wechat.action;
 
-import com.xyzq.simpson.base.etc.Base64;
 import com.xyzq.simpson.maggie.access.spring.MaggieAction;
 import com.xyzq.simpson.maggie.framework.Context;
 import com.xyzq.simpson.maggie.framework.Visitor;
