@@ -1,23 +1,25 @@
 package com.xyzq.kid.wechat.action;
 
-import com.xyzq.kid.logic.user.service.DemoService;
-import com.xyzq.simpson.base.json.JSONObject;
 import com.xyzq.simpson.maggie.access.spring.MaggieAction;
 import com.xyzq.simpson.maggie.framework.Context;
 import com.xyzq.simpson.maggie.framework.Visitor;
 import com.xyzq.simpson.maggie.framework.action.core.IAction;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.xyzq.simpson.utility.cache.core.ITimeLimitedCache;
+
+import javax.annotation.Resource;
 
 /**
  * 范例动作
  */
-@MaggieAction(path = "kid/wechat/demo")
-public class DemoAction implements IAction {
+@MaggieAction(path = "kid/wechat/test")
+public class TestAction implements IAction {
     /**
-     * Action中只支持Autowired注解引入SpringBean
+     * 缓存访问对象
+     *
+     * 缓存中内容为：mobileNo,openId
      */
-    @Autowired
-    private DemoService demoService;
+    @Resource(name = "cache")
+    protected ITimeLimitedCache<String, String> cache;
 
 
     /**
@@ -29,8 +31,9 @@ public class DemoAction implements IAction {
      */
     @Override
     public String execute(Visitor visitor, Context context) throws Exception {
-        context.set("msg", "这个是前端需要展示的消息");
-        context.set("data", JSONObject.convertFromObject(demoService.call()).toString());
+        cache.set("sid-tester", "15021819287,9527");
+        visitor.setCookie("sid", "tester");
+        context.set("msg", "测试连接，用户手机号码15021819287");
         return "success.json";
     }
 }
