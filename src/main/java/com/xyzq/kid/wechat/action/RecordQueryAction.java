@@ -30,11 +30,11 @@ public class RecordQueryAction implements IAction {
      */
     @Override
     public String execute(Visitor visitor, Context context) throws Exception {
-        Integer ticketId = Integer.valueOf(String.valueOf(context.parameter("ticketId")));
+        String serialNumber = String.valueOf(context.parameter("serialNumber"));
         String purchased =String.valueOf(context.parameter("purchased"));
         context.set("msg", "查询成功!");
         context.set("code", "0");
-        context.set("data", JSONObject.convertFromObject(recordService.findBy(ticketId,purchased)));
+        context.set("data", JSONObject.convertFromObject(recordService.findBy(serialNumber,purchased)));
         return "success.json";
     }
 
