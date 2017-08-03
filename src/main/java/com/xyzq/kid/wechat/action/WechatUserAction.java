@@ -19,6 +19,10 @@ import java.net.URLEncoder;
  */
 public class WechatUserAction implements IAction {
     /**
+     * 上下文中的键
+     */
+    public final static String CONTEXT_KEY_SID = "sid";
+    /**
      * 手机号码在上下文中的键
      */
     public final static String CONTEXT_KEY_MOBILENO = "mobileNo";
@@ -62,6 +66,7 @@ public class WechatUserAction implements IAction {
                 String openId = mobileNoOpenId.split(",")[1].trim();
                 context.put(CONTEXT_KEY_MOBILENO, mobileNo);
                 context.put(CONTEXT_KEY_OPENID, openId);
+                context.put(CONTEXT_KEY_SID, sId);
                 return null;
             }
         }
