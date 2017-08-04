@@ -65,12 +65,13 @@ public class SubmitBooking extends CustomerAction {
 				if(!StringUtils.isNullOrEmpty(type)){
 					if(type.equals("0")){//预约提交
 						if(bookService.createBook(serialNumber, repo.getId(), user.id)){
+							ticketService.useTickets(ticket.id);//票状态更新为已使用
 							context.set("code", "0");
 						}
 					}else if(type.equals("1")){//改期提交
 						Book book=bookService.queryBookRecByTicketId(ticket.id);
 						if(book!=null){
-							if(bookChangeRequestService.createRequest(book.getId(), "1", null, user.id, repo.getId())){
+							if(bookChangeRequestService.createRequest(book.getId(), "1", null, user.id, repo.getId(),"1")){
 								context.set("code", "0");
 							}
 						}
