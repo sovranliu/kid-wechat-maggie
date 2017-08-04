@@ -1,4 +1,4 @@
-package com.xyzq.kid.wechat.action;
+package com.xyzq.kid.wechat.action.member;
 
 import com.xyzq.simpson.maggie.access.spring.MaggieAction;
 import com.xyzq.simpson.maggie.framework.Context;
@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
  * 登录确认动作
  */
 @MaggieAction(path = "kid/wechat/login/route.action")
-public class LoginConfirmAction extends WechatUserAction {
+public class LoginConfirmAction extends WechatUserAjaxAction {
     /**
      * 动作执行
      *
@@ -29,7 +29,7 @@ public class LoginConfirmAction extends WechatUserAction {
         Matcher matcher = pattern.matcher(context.path());
         if(matcher.find()) {
             String code = matcher.group(1);
-            cache.set("login-" + code, (String) context.get(WechatUserAction.CONTEXT_KEY_SID), 1000 * 60);
+            cache.set("login-" + code, (String) context.get(WechatUserAjaxAction.CONTEXT_KEY_SID), 1000 * 60);
             return "success.json";
         }
         return "fail.json";

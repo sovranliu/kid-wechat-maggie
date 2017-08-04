@@ -1,4 +1,4 @@
-package com.xyzq.kid.wechat.action;
+package com.xyzq.kid.wechat.action.member;
 
 import com.xyzq.kid.common.wechat.mp.WebHelper;
 import com.xyzq.simpson.base.text.Text;
@@ -13,11 +13,11 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 /**
- * 微信用户基类动作
+ * 注册会员Ajax基类动作
  *
  * 继承此类的回调确保为可以从context上获取openId
  */
-public class WechatUserAction implements IAction {
+public class WechatUserAjaxAction implements IAction {
     /**
      * 上下文中的键
      */
@@ -75,10 +75,10 @@ public class WechatUserAction implements IAction {
             referer = url_page_default;
         }
         String url = URLEncoder.encode(referer, "utf-8");
-        String jumpUrl = URLEncoder.encode(url_domain + "/kid/wechat/jump?url=" + url, "utf-8");
+        String jumpUrl = URLEncoder.encode(url_domain + "/kid/wechat/jump/member?url=" + url, "utf-8");
         String redirectUri = WebHelper.URL_AUTHORIZE.replace("[REDIRECT_URI]", jumpUrl).replace("[STATE]", "kid");
-        context.put("location", redirectUri);
-        return "302.code";
+        context.put("redirect", redirectUri);
+        return "success.json";
     }
 
     /**

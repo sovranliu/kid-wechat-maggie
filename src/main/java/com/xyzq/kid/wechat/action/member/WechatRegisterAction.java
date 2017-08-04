@@ -1,4 +1,4 @@
-package com.xyzq.kid.wechat.action;
+package com.xyzq.kid.wechat.action.member;
 
 import com.xyzq.kid.logic.user.entity.UserEntity;
 import com.xyzq.kid.logic.user.service.UserService;

@@ -1,4 +1,4 @@
-package com.xyzq.kid.wechat.action;
+package com.xyzq.kid.wechat.action.member;
 
 import com.xyzq.simpson.maggie.access.spring.MaggieAction;
 import com.xyzq.simpson.maggie.framework.Context;
@@ -10,7 +10,7 @@ import com.xyzq.simpson.maggie.framework.Visitor;
  * 用于纯静态页面判断用户是否是注册用户
  */
 @MaggieAction(path = "kid/wechat/handshake")
-public class HandShakeAction extends WechatUserAction {
+public class HandShakeAction extends WechatUserAjaxAction {
     /**
      * 动作执行
      *
