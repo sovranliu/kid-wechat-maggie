@@ -54,7 +54,7 @@ public class GetBooksAction extends CustomerAction{
 		if(ticketList!=null&&ticketList.size()>0){
 			for(int i=0;i<=ticketList.size();i++){
 				TicketEntity ticket=ticketList.get(i);
-				Book book=bookService.queryBookRecByTicketId(Integer.valueOf(ticket.serialno));
+				Book book=bookService.queryBookRecByTicketId(Integer.valueOf(ticket.serialNumber));
 				if(book!=null){
 					Map<String,String> bookMap=new HashMap<>();
 					bookMap.put("id", String.valueOf(i));
@@ -89,7 +89,7 @@ public class GetBooksAction extends CustomerAction{
 					}
 					bookMap.put("status", status);
 					bookMap.put("expire", book.getBookdate());
-					bookMap.put("serialNumber", String.valueOf(ticket.serialno));
+					bookMap.put("serialNumber", String.valueOf(ticket.serialNumber));
 					mapList.add(bookMap);
 				}
 			}

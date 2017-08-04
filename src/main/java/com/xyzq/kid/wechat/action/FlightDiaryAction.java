@@ -87,8 +87,8 @@ public class FlightDiaryAction implements IAction {
             context.set("msg", "飞行票serialNumber不存在!");
             return "success.json";
         }
-        List<RecordEntity> canPurchaseList = recordService.findBy(ticketEntity.serialno, RecordEntity.UNPURCHASED);
-        List<RecordEntity> hasPurchasedList = recordService.findBy(ticketEntity.serialno, RecordEntity.PURCHASED);
+        List<RecordEntity> canPurchaseList = recordService.findBy(ticketEntity.serialNumber, RecordEntity.UNPURCHASED);
+        List<RecordEntity> hasPurchasedList = recordService.findBy(ticketEntity.serialNumber, RecordEntity.PURCHASED);
 
         Map<String, Object> resultMap = new HashMap<>();
         resultMap.put("serialNo", serialNo);
