@@ -15,6 +15,7 @@ import java.util.List;
 
 /**
  * 飞行日记获取
+ * 不再使用
  */
 @MaggieAction(path = "kid/wechat/buyFlightDiary")
 public class BuyFlightDiaryAction implements IAction {
