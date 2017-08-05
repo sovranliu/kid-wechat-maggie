@@ -1,18 +1,17 @@
 package com.xyzq.kid.wechat.book.action;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.google.gson.Gson;
 import com.mysql.jdbc.StringUtils;
-import com.xyzq.kid.wechat.action.member.WechatUserAjaxAction;
 import com.xyzq.kid.logic.book.dao.po.BookTimeRepository;
 import com.xyzq.kid.logic.book.dao.po.BookTimeSpan;
 import com.xyzq.kid.logic.book.service.BookRepositoryService;
 import com.xyzq.kid.logic.book.service.BookTimeSpanService;
+import com.xyzq.kid.wechat.action.member.WechatUserAjaxAction;
 import com.xyzq.simpson.maggie.access.spring.MaggieAction;
 import com.xyzq.simpson.maggie.framework.Context;
 import com.xyzq.simpson.maggie.framework.Visitor;

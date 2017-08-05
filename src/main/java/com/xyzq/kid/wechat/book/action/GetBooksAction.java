@@ -25,7 +25,7 @@ import com.xyzq.simpson.maggie.access.spring.MaggieAction;
 import com.xyzq.simpson.maggie.framework.Context;
 import com.xyzq.simpson.maggie.framework.Visitor;
 
-@MaggieAction(path="kid/wechat/book/getBooks")
+@MaggieAction(path="kid/wechat/getBooks")
 public class GetBooksAction extends WechatUserAjaxAction{
 	
 	@Autowired
@@ -46,14 +46,14 @@ public class GetBooksAction extends WechatUserAjaxAction{
 	public String doExecute(Visitor visitor, Context context) throws Exception {
 		String mobileNo=(String)context.get(CONTEXT_KEY_MOBILENO);
 		List<TicketEntity> ticketList=ticketService.getTicketsInfoByOwnerMobileNo(mobileNo);
-		List<Map<String,String>> mapList=new ArrayList<>();
+		List<Map<String,Object>> mapList=new ArrayList<>();
 		if(ticketList!=null&&ticketList.size()>0){
 			for(int i=0;i<=ticketList.size();i++){
 				TicketEntity ticket=ticketList.get(i);
 				Book book=bookService.queryBookRecByTicketId(Integer.valueOf(ticket.serialNumber));
 				if(book!=null){
-					Map<String,String> bookMap=new HashMap<>();
-					bookMap.put("id", String.valueOf(i));
+					Map<String,Object> bookMap=new HashMap<>();
+					bookMap.put("id", book.getId());
 					String bookStatus=book.getBookstatus();//1：已预约，2：改期申请中，3：改期通过，4：改期拒绝，5：核销完成，6：撤销申请中，7：撤销通过，8：拒绝撤销
 					String status="0";//0：已预约 1：已过期 2：已核销 3：改期审核中 4：已撤销 5：撤销申请中
 					if(checkExpire(book.getBookdate())){
