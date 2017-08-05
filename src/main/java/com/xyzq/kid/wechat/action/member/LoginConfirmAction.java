@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
  * 登录确认动作
  */
 @MaggieAction(path = "kid/wechat/login/route.action")
-public class LoginConfirmAction extends WechatUserAjaxAction {
+public class LoginConfirmAction extends WechatUserPageAction {
     /**
      * 派生类动作执行
      *
@@ -26,8 +26,11 @@ public class LoginConfirmAction extends WechatUserAjaxAction {
         if(matcher.find()) {
             String code = matcher.group(1);
             cache.set("login-" + code, (String) context.get(WechatUserAjaxAction.CONTEXT_KEY_SID), 1000 * 60);
-            return "success.json";
+            context.set("url", "/kid/static/wechat/ScanResult.html?result=true");
         }
-        return "fail.json";
+        else {
+            context.set("url", "/kid/static/wechat/ScanResult.html?result=false");
+        }
+        return "redirect.url";
     }
 }
