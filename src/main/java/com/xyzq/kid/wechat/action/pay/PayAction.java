@@ -1,5 +1,6 @@
 package com.xyzq.kid.wechat.action.pay;
 
+import com.xyzq.kid.common.wechat.utility.WechatConfig;
 import com.xyzq.kid.finance.service.OrderService;
 import com.xyzq.kid.finance.service.entity.NewOrderEntity;
 import com.xyzq.kid.logic.config.service.GoodsTypeService;
@@ -74,6 +75,8 @@ public class PayAction implements IAction {
         JSONObject data = new JSONObject();
         data.put("orderNo", new JSONString(newOrderEntity.orderNo));
         data.put("openId", new JSONString(newOrderEntity.openId));
+        data.put("appId", new JSONString(WechatConfig.appId));
+        data.put("prepayId", new JSONString(newOrderEntity.prepayId));
         data.put("nonceString", new JSONString(newOrderEntity.nonceString));
         data.put("signType", new JSONString(newOrderEntity.signType));
         data.put("timestamp", new JSONString("" + newOrderEntity.timestamp));
