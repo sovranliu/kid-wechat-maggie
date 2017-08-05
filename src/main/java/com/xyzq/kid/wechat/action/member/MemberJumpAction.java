@@ -14,8 +14,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
-import java.io.UnsupportedEncodingException;
-
 /**
  * 微信跳转中间页
  */
@@ -80,30 +78,5 @@ public class MemberJumpAction implements IAction {
         visitor.setCookie("sid", sessionEntity.sId);
         context.put("location", url);
         return "302.code";
-    }
-
-    /**
-     * 字符串转URL
-     */
-    public static String string2Url(String string) throws UnsupportedEncodingException {
-        byte[] bytes = hexStringToBytes(string);
-        return new String(bytes, "utf-8");
-    }
-    private static byte[] hexStringToBytes(String hexString) {
-        if (hexString == null || hexString.equals("")) {
-            return null;
-        }
-        hexString = hexString.toUpperCase();
-        int length = hexString.length() / 2;
-        char[] hexChars = hexString.toCharArray();
-        byte[] d = new byte[length];
-        for (int i = 0; i < length; i++) {
-            int pos = i * 2;
-            d[i] = (byte) (charToByte(hexChars[pos]) << 4 | charToByte(hexChars[pos + 1]));
-        }
-        return d;
-    }
-    private static byte charToByte(char c) {
-        return (byte) "0123456789ABCDEF".indexOf(c);
     }
 }

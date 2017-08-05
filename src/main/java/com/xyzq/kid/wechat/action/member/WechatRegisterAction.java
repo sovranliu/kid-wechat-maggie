@@ -1,5 +1,6 @@
 package com.xyzq.kid.wechat.action.member;
 
+import com.xyzq.kid.logic.user.entity.SessionEntity;
 import com.xyzq.kid.logic.user.entity.UserEntity;
 import com.xyzq.kid.logic.user.service.UserService;
 import com.xyzq.simpson.base.etc.Serial;
@@ -58,20 +59,11 @@ public class WechatRegisterAction implements IAction {
         entity.realname = name;
         entity.openid = openId;
         userService.insertSelective(entity);
-        visitor.setCookie("sid", makeSId(mobileNo, openId));
+        // 生成Session
+        SessionEntity sessionEntity = new SessionEntity(null, mobileNo, openId);
+        sessionEntity.makeSId();
+        visitor.setCookie("sid", sessionEntity.sId);
+        userService.saveSession(sessionEntity);
         return "success.json";
-    }
-
-    /**
-     * 构建会话
-     *
-     * @param mobileNo 手机号码
-     * @param openId 微信用户开放ID
-     * @return 用户会话ID
-     */
-    public String makeSId(String mobileNo, String openId) {
-        String sId = Serial.makeLocalID();
-        cache.set("sid-" + sId, mobileNo + "," + openId);
-        return sId;
     }
 }

@@ -9,11 +9,10 @@ import com.xyzq.simpson.utility.cache.core.ITimeLimitedCache;
 import org.springframework.beans.factory.annotation.Value;
 
 import javax.annotation.Resource;
-import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 /**
- * 注册会员Ajax基类动作
+ * 会员Ajax基类动作
  *
  * 继承此类的回调确保为可以从context上获取openId
  */
@@ -79,28 +78,5 @@ public class WechatUserAjaxAction implements IAction {
         String redirectUri = WebHelper.URL_AUTHORIZE.replace("[REDIRECT_URI]", jumpUrl).replace("[STATE]", "kid");
         context.put("redirect", redirectUri);
         return "success.json";
-    }
-
-    /**
-     * URL转字符串
-     */
-    public static String url2String(String url) throws UnsupportedEncodingException {
-        return bytesToHexString(url.getBytes("utf-8"));
-    }
-
-    private static String bytesToHexString(byte[] src) {
-        StringBuilder stringBuilder = new StringBuilder("");
-        if (src == null || src.length <= 0) {
-            return null;
-        }
-        for (int i = 0; i < src.length; i++) {
-            int v = src[i] & 0xFF;
-            String hv = Integer.toHexString(v);
-            if (hv.length() < 2) {
-                stringBuilder.append(0);
-            }
-            stringBuilder.append(hv);
-        }
-        return stringBuilder.toString();
     }
 }
