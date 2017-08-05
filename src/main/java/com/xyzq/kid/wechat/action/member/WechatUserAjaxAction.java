@@ -80,7 +80,7 @@ public abstract class WechatUserAjaxAction implements IAction {
         String url = URLEncoder.encode(referer, "utf-8");
         String jumpUrl = URLEncoder.encode(url_domain + "/kid/wechat/jump/member?url=" + url, "utf-8");
         String redirectUri = WebHelper.URL_AUTHORIZE.replace("[REDIRECT_URI]", jumpUrl).replace("[STATE]", "kid");
-        context.put("redirect", redirectUri);
+        context.set("redirect", redirectUri);
         return "fail.json";
     }
 
