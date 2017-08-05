@@ -12,7 +12,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.google.gson.Gson;
-import com.xyzq.kid.common.action.CustomerAction;
+import com.xyzq.kid.wechat.action.member.WechatUserAjaxAction;
 import com.xyzq.kid.logic.book.dao.po.Book;
 import com.xyzq.kid.logic.book.dao.po.BookTimeRepository;
 import com.xyzq.kid.logic.book.dao.po.BookTimeSpan;
@@ -26,7 +26,7 @@ import com.xyzq.simpson.maggie.framework.Context;
 import com.xyzq.simpson.maggie.framework.Visitor;
 
 @MaggieAction(path="kid/wechat/book/getBooks")
-public class GetBooksAction extends CustomerAction{
+public class GetBooksAction extends WechatUserAjaxAction{
 	
 	@Autowired
 	BookService bookService;
@@ -43,11 +43,7 @@ public class GetBooksAction extends CustomerAction{
 	Gson gson=new Gson();
 	
 	@Override
-	public String execute(Visitor visitor, Context context) throws Exception {
-		String result=super.execute(visitor, context);
-		if(result!=null){
-			return result;
-		}
+	public String doExecute(Visitor visitor, Context context) throws Exception {
 		String mobileNo=(String)context.get(CONTEXT_KEY_MOBILENO);
 		List<TicketEntity> ticketList=ticketService.getTicketsInfoByOwnerMobileNo(mobileNo);
 		List<Map<String,String>> mapList=new ArrayList<>();

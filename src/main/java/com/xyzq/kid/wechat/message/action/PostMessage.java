@@ -3,7 +3,7 @@ package com.xyzq.kid.wechat.message.action;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.mysql.jdbc.StringUtils;
-import com.xyzq.kid.common.action.CustomerAction;
+import com.xyzq.kid.wechat.action.member.WechatUserAjaxAction;
 import com.xyzq.kid.logic.message.service.MessageService;
 import com.xyzq.kid.logic.user.entity.UserEntity;
 import com.xyzq.kid.logic.user.service.UserService;
@@ -12,7 +12,7 @@ import com.xyzq.simpson.maggie.framework.Context;
 import com.xyzq.simpson.maggie.framework.Visitor;
 
 @MaggieAction(path="kid/wechat/postMessage")
-public class PostMessage extends CustomerAction {
+public class PostMessage extends WechatUserAjaxAction {
 	
 	@Autowired
 	UserService userService;
@@ -21,11 +21,7 @@ public class PostMessage extends CustomerAction {
 	MessageService messageService;
 
 	@Override
-	public String execute(Visitor visitor, Context context) throws Exception {
-		String result=super.execute(visitor, context);
-		if(result!=null){
-			return result;
-		}
+	public String doExecute(Visitor visitor, Context context) throws Exception {
 		String mobileNo=(String)context.get(CONTEXT_KEY_MOBILENO);
 		UserEntity user=userService.selectByMolieNo(mobileNo);
 		String content=(String)context.parameter("content");

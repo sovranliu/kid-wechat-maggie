@@ -3,7 +3,7 @@ package com.xyzq.kid.wechat.book.action;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.mysql.jdbc.StringUtils;
-import com.xyzq.kid.common.action.CustomerAction;
+import com.xyzq.kid.wechat.action.member.WechatUserAjaxAction;
 import com.xyzq.kid.logic.book.dao.po.Book;
 import com.xyzq.kid.logic.book.dao.po.BookTimeRepository;
 import com.xyzq.kid.logic.book.dao.po.BookTimeSpan;
@@ -20,7 +20,7 @@ import com.xyzq.simpson.maggie.framework.Context;
 import com.xyzq.simpson.maggie.framework.Visitor;
 
 @MaggieAction(path="kid/wechat/submitBooking")
-public class SubmitBooking extends CustomerAction {
+public class SubmitBooking extends WechatUserAjaxAction {
 	
 	@Autowired
 	BookRepositoryService bookRepositoryService;
@@ -41,11 +41,7 @@ public class SubmitBooking extends CustomerAction {
 	BookService bookService;
 
 	@Override
-	public String execute(Visitor visitor, Context context) throws Exception {
-		String result=super.execute(visitor, context);
-		if(result!=null){
-			return result;
-		}
+	public String doExecute(Visitor visitor, Context context) throws Exception {
 		String mobileNo=(String)context.get(CONTEXT_KEY_MOBILENO);
 		UserEntity user=userService.selectByMolieNo(mobileNo);
 		String serialNumber=(String)context.parameter("serialNumber");
