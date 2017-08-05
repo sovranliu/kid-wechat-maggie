@@ -13,18 +13,14 @@ import java.util.regex.Pattern;
 @MaggieAction(path = "kid/wechat/login/route.action")
 public class LoginConfirmAction extends WechatUserAjaxAction {
     /**
-     * 动作执行
+     * 派生类动作执行
      *
      * @param visitor 访问者
      * @param context 请求上下文
      * @return 下一步动作，包括后缀名，null表示结束
      */
     @Override
-    public String execute(Visitor visitor, Context context) throws Exception {
-        String result = super.execute(visitor, context);
-        if(null != result) {
-            return result;
-        }
+    public String doExecute(Visitor visitor, Context context) throws Exception {
         Pattern pattern = Pattern.compile("kid/wechat/login/([\\w=]+)");
         Matcher matcher = pattern.matcher(context.path());
         if(matcher.find()) {
