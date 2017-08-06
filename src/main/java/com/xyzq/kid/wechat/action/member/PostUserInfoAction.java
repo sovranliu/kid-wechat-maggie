@@ -34,7 +34,6 @@ public class PostUserInfoAction extends WechatUserAjaxAction {
 
         UserEntity userEntity = new UserEntity();
         userEntity.telephone = (String) context.get(WechatUserAjaxAction.CONTEXT_KEY_MOBILENO);
-        userEntity.openid = (String) context.get(WechatUserAjaxAction.CONTEXT_KEY_OPENID);
         userEntity.userName = (String)context.parameter("userName");
         userEntity.sex = (Integer)context.parameter("sex", 0);
         userEntity.address = (String)context.parameter("address", "");
