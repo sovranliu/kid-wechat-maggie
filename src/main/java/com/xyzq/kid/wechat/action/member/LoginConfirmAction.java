@@ -21,7 +21,7 @@ public class LoginConfirmAction extends WechatUserPageAction {
      */
     @Override
     public String doExecute(Visitor visitor, Context context) throws Exception {
-        Pattern pattern = Pattern.compile("kid/wechat/login/([\\w=]+)");
+        Pattern pattern = Pattern.compile("kid/wechat/login/([\\w=]+)\\.jpg");
         Matcher matcher = pattern.matcher(context.path());
         if(matcher.find()) {
             String code = matcher.group(1);
