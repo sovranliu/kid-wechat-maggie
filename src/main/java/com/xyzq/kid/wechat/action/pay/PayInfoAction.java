@@ -48,8 +48,8 @@ public class PayInfoAction implements IAction {
      */
     @Override
     public String execute(Visitor visitor, Context context) throws Exception {
-        String payerOpenId = (String) context.get("openId");
-        String ownerMobileNo = (String) context.get("mobileNo");
+        String payerOpenId = (String) context.parameter("openId");
+        String ownerMobileNo = (String) context.parameter("mobileNo");
         if(Text.isBlank(payerOpenId) || Text.isBlank(ownerMobileNo)) {
             context.set("msg", "商品购买查询信息不全");
             return "fail.json";
