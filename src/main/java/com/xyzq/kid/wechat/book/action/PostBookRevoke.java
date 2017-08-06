@@ -31,6 +31,7 @@ public class PostBookRevoke extends WechatUserAjaxAction {
 	
 	@Override
 	public String doExecute(Visitor visitor, Context context) throws Exception {
+		context.set("code", "-9");
 		String mobileNo=(String)context.get(CONTEXT_KEY_MOBILENO);
 		UserEntity user=userService.selectByMolieNo(mobileNo);
 		String serialNumber=(String)context.parameter("serialNumber");

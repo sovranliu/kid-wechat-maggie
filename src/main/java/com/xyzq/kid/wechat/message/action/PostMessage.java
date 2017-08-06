@@ -22,6 +22,7 @@ public class PostMessage extends WechatUserAjaxAction {
 
 	@Override
 	public String doExecute(Visitor visitor, Context context) throws Exception {
+		context.set("code", "-9");
 		String mobileNo=(String)context.get(CONTEXT_KEY_MOBILENO);
 		UserEntity user=userService.selectByMolieNo(mobileNo);
 		String content=(String)context.parameter("content");
