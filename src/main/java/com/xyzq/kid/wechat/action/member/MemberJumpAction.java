@@ -66,7 +66,7 @@ public class MemberJumpAction implements IAction {
         UserEntity userEntity = userService.selectByOpenId(openId);
         String mobileNo = null;
         if(null != userEntity) {
-            mobileNo = userEntity.mobileno;
+            mobileNo = userEntity.telephone;
         }
         if(null == mobileNo) {
             context.put("location", url_page_register + "?openId=" + openId);

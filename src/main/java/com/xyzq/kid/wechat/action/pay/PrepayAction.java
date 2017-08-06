@@ -109,7 +109,7 @@ public class PrepayAction implements IAction {
                 context.set("redirect", url_page_register);
                 return "success.json";
             }
-            mobileNo = userEntity.mobileno;
+            mobileNo = userEntity.telephone;
             if(referer.contains("?")) {
                 referer = referer + "&mobileNo=" + mobileNo + "&openId=" + openId;
             }

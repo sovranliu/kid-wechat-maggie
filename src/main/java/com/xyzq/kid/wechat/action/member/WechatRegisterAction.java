@@ -54,8 +54,8 @@ public class WechatRegisterAction implements IAction {
             return "fail.json";
         }
         UserEntity entity = new UserEntity();
-        entity.mobileno = mobileNo;
-        entity.realname = name;
+        entity.telephone = mobileNo;
+        entity.userName = name;
         entity.openid = openId;
         userService.insertSelective(entity);
         // 生成Session

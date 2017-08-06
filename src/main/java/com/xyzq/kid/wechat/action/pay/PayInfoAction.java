@@ -61,7 +61,7 @@ public class PayInfoAction implements IAction {
         }
         JSONObject jsonUser = new JSONObject();
         jsonUser.put("mobileNo", new JSONString(ownerMobileNo));
-        jsonUser.put("name", new JSONString("" + userEntity.realname));
+        jsonUser.put("name", new JSONString("" + userEntity.userName));
         JSONObject feeUser = new JSONObject();
         feeUser.put("singleticket", new JSONNumber(configService.fetch(ConfigCommon.FEE_SINGLETICKET, Integer.class)));
         feeUser.put("groupticket", new JSONNumber(configService.fetch(ConfigCommon.FEE_GROUPTICKET, Integer.class)));
