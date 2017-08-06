@@ -35,7 +35,7 @@ public class GiveTicketAction extends WechatUserAjaxAction {
         TicketEntity ticketEntity = ticketService.getTicketsInfoBySerialno(serialNumber);
         String mobileNo = (String)context.parameter("phone");
 
-        ticketService.handselTickets(ticketEntity.id, mobileNo);
+        ticketService.handselTickets(ticketEntity.id, mobileNo, ticketEntity.telephone);
 
         return "success.json";
     }

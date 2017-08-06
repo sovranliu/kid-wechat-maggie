@@ -44,6 +44,7 @@ public class ReceiveTicketAction extends WechatUserAjaxAction {
             context.set("data", gson.toJson(map));
             return "success.json";
         }
+        UserEntity userEntityOld = userService.selectByMolieNo(ticketEntity.telephone);
         UserEntity userEntity = userService.selectByMolieNo(mobileNo);
         if(null == userEntity || null == userEntity.userName) {
             map.put("result", false);
@@ -53,9 +54,9 @@ public class ReceiveTicketAction extends WechatUserAjaxAction {
 
         map.put("serialNo", serialNumber);
         map.put("payerMobileNo", ticketEntity.telephone);
-        map.put("payerName", userEntity.userName);
+        map.put("payerName", userEntityOld.userName);
 
-        if(!"success".equals(ticketService.handselTickets(ticketEntity.id, mobileNo))) {
+        if(!"success".equals(ticketService.handselTickets(ticketEntity.id, mobileNo, ticketEntity.telephone))) {
             map.put("result", false);
         } else {
             map.put("result", true);
