@@ -33,8 +33,8 @@ public class PostUserInfoAction extends WechatUserAjaxAction {
     public String doExecute(Visitor visitor, Context context) throws Exception {
 
         UserEntity userEntity = new UserEntity();
-        userEntity.telephone = (String) context.get(PortalUserAjaxAction.CONTEXT_KEY_MOBILENO);
-        userEntity.openid = (String) context.get(PortalUserAjaxAction.CONTEXT_KEY_OPENID);
+        userEntity.telephone = (String) context.get(WechatUserAjaxAction.CONTEXT_KEY_MOBILENO);
+        userEntity.openid = (String) context.get(WechatUserAjaxAction.CONTEXT_KEY_OPENID);
         userEntity.userName = (String)context.parameter("userName");
         userEntity.sex = (Integer)context.parameter("sex", -1);
         userEntity.address = (String)context.parameter("address", "未填");
