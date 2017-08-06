@@ -48,9 +48,9 @@ public class GetBooksAction extends WechatUserAjaxAction{
 		List<TicketEntity> ticketList=ticketService.getTicketsInfoByOwnerMobileNo(mobileNo);
 		List<Map<String,Object>> mapList=new ArrayList<>();
 		if(ticketList!=null&&ticketList.size()>0){
-			for(int i=0;i<=ticketList.size();i++){
+			for(int i=0;i<ticketList.size();i++){
 				TicketEntity ticket=ticketList.get(i);
-				Book book=bookService.queryBookRecByTicketId(Integer.valueOf(ticket.serialNumber));
+				Book book=bookService.queryBookRecByTicketId(ticket.id);
 				if(book!=null){
 					Map<String,Object> bookMap=new HashMap<>();
 					bookMap.put("id", book.getId());
