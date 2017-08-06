@@ -34,6 +34,7 @@ public class GetBookAbleNum extends WechatUserAjaxAction {
 		String day=(String)context.parameter("day");
 		String start=(String)context.parameter("start");
 		String end=(String)context.parameter("end");
+		System.out.println("year:"+year+" --"+"month:"+month+" --"+" day"+day+" -- start:"+start+" --end:"+end);
 		String bookAbleNum="0";
 		if(!StringUtils.isNullOrEmpty(year)&&!StringUtils.isNullOrEmpty(month)&&!StringUtils.isNullOrEmpty(day)){
 			String bookDate=year+"-"+month+"-"+day;
