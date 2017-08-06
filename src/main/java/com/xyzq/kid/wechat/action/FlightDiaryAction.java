@@ -48,24 +48,23 @@ public class FlightDiaryAction extends WechatUserAjaxAction {
 	@Override
 	public String doExecute(Visitor visitor, Context context) throws Exception {
 
-		String mobileNo = String.valueOf(context.parameter(CONTEXT_KEY_MOBILENO));
+		String mobileNo = String.valueOf(context.get(CONTEXT_KEY_MOBILENO));
 		//查询已使用票
 		List<TicketEntity> ticketEntityList = ticketService.getTicketsInfoByOwnerMobileNo(mobileNo);
 		if (ticketEntityList == null || ticketEntityList.isEmpty()) {
 			context.set("code", "0");
-			context.set("msg", "查询成功");
 			context.set("data", JSONArray.convert(null));
 			return "success.json";
 		}
-		List<Integer> usedTicketIdList = new ArrayList<>();
+		List<String> usedTIcketSerialNoList = new ArrayList<>();
 		for (TicketEntity entity : ticketEntityList) {
 			//搜集已使用票的流水号
 			if (TicketEntity.TICKET_STATUS_USED == entity.status) {
-				usedTicketIdList.add(entity.id);
+				usedTIcketSerialNoList.add(entity.serialNumber);
 			}
 		}
-		List<RecordEntity> canPurchaseList = recordService.findBy(usedTicketIdList, RecordEntity.UNPURCHASED);
-		List<RecordEntity> hasPurchasedList = recordService.findBy(usedTicketIdList, RecordEntity.PURCHASED);
+		List<RecordEntity> canPurchaseList = recordService.findBy(usedTIcketSerialNoList, RecordEntity.UNPURCHASED);
+		List<RecordEntity> hasPurchasedList = recordService.findBy(usedTIcketSerialNoList, RecordEntity.PURCHASED);
 		Integer price = Integer.valueOf(configService.fetch(ConfigCommon.FEE_RECORD));
 		Integer accumulateTime = Integer.valueOf(configService.fetch(ConfigCommon.TICKET_ACCUMULATE_TIME));
 		//获取所有已经购买飞行日志的票券流水号，放入map
@@ -76,10 +75,9 @@ public class FlightDiaryAction extends WechatUserAjaxAction {
 		Map<String, Object> resultMap = new HashMap<>();
 		resultMap.put("canPurchase", transToMap(canPurchaseList, context));
 		resultMap.put("hasPurchased", transToMap(hasPurchasedList, context));
-		resultMap.put("timeDuration", usedTicketIdList == null ? 0 : usedTicketIdList.size() * accumulateTime);
-		resultMap.put("canPurchasePrice", usedTicketIdList == null ? 0 : (usedTicketIdList.size() - hasPurchasedTicketSerialNoMap.size()) * accumulateTime);
+		resultMap.put("timeDuration", usedTIcketSerialNoList == null ? 0 : usedTIcketSerialNoList.size() * accumulateTime);
+		resultMap.put("canPurchasePrice", usedTIcketSerialNoList == null ? 0 : (usedTIcketSerialNoList.size() - hasPurchasedTicketSerialNoMap.size()) * accumulateTime);
 		context.set("code", "0");
-		context.set("msg", "查询成功");
 		context.set("data", JSONObject.convertFromTable(resultMap));
 		return "success.json";
 	}
