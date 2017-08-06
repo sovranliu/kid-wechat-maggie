@@ -77,6 +77,7 @@ public class MemberJumpAction implements IAction {
         userService.saveSession(sessionEntity);
         visitor.setCookie("sid", sessionEntity.sId);
         context.put("location", url);
+        logger.info("member jump : " + url);
         return "302.code";
     }
 }

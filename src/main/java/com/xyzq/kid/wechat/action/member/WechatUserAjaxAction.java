@@ -8,6 +8,8 @@ import com.xyzq.simpson.maggie.framework.Context;
 import com.xyzq.simpson.maggie.framework.Visitor;
 import com.xyzq.simpson.maggie.framework.action.core.IAction;
 import com.xyzq.simpson.utility.cache.core.ITimeLimitedCache;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
@@ -20,6 +22,10 @@ import java.net.URLEncoder;
  * 继承此类的回调确保为可以从context上获取openId
  */
 public abstract class WechatUserAjaxAction implements IAction {
+    /**
+     * 日志对象
+     */
+    protected static Logger logger = LoggerFactory.getLogger(WechatUserAjaxAction.class);
     /**
      * 上下文中的键
      */
@@ -64,6 +70,7 @@ public abstract class WechatUserAjaxAction implements IAction {
     @Override
     public String execute(Visitor visitor, Context context) throws Exception {
         String sId = visitor.cookie("sid");
+        logger.info("wechat ajax " + context.uri() + ", ip = " + visitor.ip() + ", sid = " + sId);
         if(!Text.isBlank(sId)) {
             SessionEntity sessionEntity = userService.fetchSession(sId);
             if(null != sessionEntity) {
@@ -75,12 +82,15 @@ public abstract class WechatUserAjaxAction implements IAction {
         }
         String referer = context.header().get("Referer");
         if(null == referer) {
+            logger.info("wechat ajax " + visitor.ip() + ", referer = null");
             referer = url_page_default;
         }
+        logger.info("wechat ajax " + visitor.ip() + ", adjust referer = " + referer);
         String url = URLEncoder.encode(referer, "utf-8");
         String jumpUrl = URLEncoder.encode(url_domain + "/kid/wechat/jump/member?url=" + url, "utf-8");
         String redirectUri = WebHelper.URL_AUTHORIZE.replace("[REDIRECT_URI]", jumpUrl).replace("[STATE]", "kid");
         context.set("redirect", redirectUri);
+        logger.info("wechat ajax " + visitor.ip() + ", redirect = " + redirectUri);
         return "fail.json";
     }
 
