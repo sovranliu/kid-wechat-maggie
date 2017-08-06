@@ -79,6 +79,9 @@ public abstract class WechatUserPageAction implements IAction {
                 context.put(CONTEXT_KEY_SID, sId);
                 return doExecute(visitor, context);
             }
+            else {
+                logger.info("session is empty, sid = " + sId);
+            }
         }
         String referer = context.url();
         if (null == referer) {

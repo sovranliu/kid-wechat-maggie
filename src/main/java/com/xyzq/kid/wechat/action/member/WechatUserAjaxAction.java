@@ -79,8 +79,14 @@ public abstract class WechatUserAjaxAction implements IAction {
                 context.put(CONTEXT_KEY_SID, sId);
                 return doExecute(visitor, context);
             }
+            else {
+                logger.info("session is empty, sid = " + sId);
+            }
         }
         String referer = context.header().get("Referer");
+        if(null == referer) {
+            referer = context.header().get("referer");
+        }
         if(null == referer) {
             logger.info("wechat ajax " + visitor.ip() + ", referer = null");
             referer = url_page_default;
