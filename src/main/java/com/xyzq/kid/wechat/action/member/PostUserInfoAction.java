@@ -31,17 +31,14 @@ public class PostUserInfoAction extends WechatUserAjaxAction {
      */
     @Override
     public String doExecute(Visitor visitor, Context context) throws Exception {
-
         UserEntity userEntity = new UserEntity();
         userEntity.telephone = (String) context.get(WechatUserAjaxAction.CONTEXT_KEY_MOBILENO);
         userEntity.openid = (String) context.get(WechatUserAjaxAction.CONTEXT_KEY_OPENID);
         userEntity.userName = (String)context.parameter("userName");
-        userEntity.sex = (Integer)context.parameter("sex", -1);
-        userEntity.address = (String)context.parameter("address", "未填");
+        userEntity.sex = (Integer)context.parameter("sex", 0);
+        userEntity.address = (String)context.parameter("address", "");
         userEntity.subscribetime = CommonTool.dataToStringYMDHMS(new Date());
-
-        userService.insertSelective(userEntity);
+        userService.updateByMobileNo(userEntity);
         return "success.json";
     }
-
 }
