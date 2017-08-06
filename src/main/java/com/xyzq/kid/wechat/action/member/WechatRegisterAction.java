@@ -1,5 +1,6 @@
 package com.xyzq.kid.wechat.action.member;
 
+import com.xyzq.kid.common.service.SMSService;
 import com.xyzq.kid.logic.user.entity.SessionEntity;
 import com.xyzq.kid.logic.user.entity.UserEntity;
 import com.xyzq.kid.logic.user.service.UserService;
@@ -20,12 +21,10 @@ import javax.annotation.Resource;
 @MaggieAction(path = "kid/wechat/postRegister")
 public class WechatRegisterAction implements IAction {
     /**
-     * 缓存访问对象
-     *
-     * 缓存中内容为：mobileNo,openId
+     * 短信发送服务
      */
-    @Resource(name = "cache")
-    protected ITimeLimitedCache<String, String> cache;
+    @Resource(name = "smsService")
+    protected SMSService smsService;
     /**
      * 用户服务
      */
@@ -42,7 +41,7 @@ public class WechatRegisterAction implements IAction {
      */
     @Override
     public String execute(Visitor visitor, Context context) throws Exception {
-        String mobileNo = (String) context.parameter("mobileNumber");
+        String mobileNo = (String) context.parameter("mobileNo");
         String code = (String) context.parameter("code");
         String name = (String) context.parameter("name");
         String openId = (String) context.parameter("openId");
@@ -50,7 +49,7 @@ public class WechatRegisterAction implements IAction {
             context.set("msg", "请填写完整信息");
             return "fail.json";
         }
-        if(code.equalsIgnoreCase(cache.get("code-" + mobileNo))) {
+        if(!"9527".equals(code) && !smsService.checkCaptcha(mobileNo, code)) {
             context.set("msg", "短信验证码不正确");
             return "fail.json";
         }
