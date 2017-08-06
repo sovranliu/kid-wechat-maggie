@@ -51,10 +51,8 @@ public class GetBookingTime extends WechatUserAjaxAction {
 				}
 			}
 		}
-		if(spanList.size()>0){
-			context.set("code", 0);
-			context.set("data", gson.toJson(spanList));
-		}
+		context.set("code", 0);
+		context.set("data", gson.toJson(spanList));
 		return "success.json";
 	}
 

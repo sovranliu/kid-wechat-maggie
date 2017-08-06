@@ -89,11 +89,9 @@ public class GetBooksAction extends WechatUserAjaxAction{
 					mapList.add(bookMap);
 				}
 			}
-			if(mapList.size()>0){
-				context.set("code", "0");
-				context.set("data", gson.toJson(mapList));
-			}
 		}
+		context.set("code", "0");
+		context.set("data", gson.toJson(mapList));
 		return "success.json";
 	}
 	/**

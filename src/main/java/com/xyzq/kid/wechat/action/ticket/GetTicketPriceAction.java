@@ -38,9 +38,9 @@ public class GetTicketPriceAction implements IAction {
         Map result = configService.getPriceInfo();
         Map<String,Object> map=new HashMap<>();
         if(result!=null&&result.size()>0){
-        	map.put("single", map.get(ConfigCommon.FEE_SINGLETICKET));
-        	map.put("group", map.get(ConfigCommon.FEE_GROUPTICKET));
-        	map.put("refundInsurance", map.get(ConfigCommon.FEE_INSURANCE));
+        	map.put("single", result.get(ConfigCommon.FEE_SINGLETICKET));
+        	map.put("group", result.get(ConfigCommon.FEE_GROUPTICKET));
+        	map.put("refundInsurance", result.get(ConfigCommon.FEE_INSURANCE));
         }
         if(null != map) {
             context.set("data", gson.toJson(map));
