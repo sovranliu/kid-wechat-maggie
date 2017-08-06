@@ -55,6 +55,9 @@ public class PrepayAction implements IAction {
     public String execute(Visitor visitor, Context context) throws Exception {
         // 提取当前支付页面URL
         String referer = context.header().get("Referer");
+        if(null == referer) {
+            referer = context.header().get("referer");
+        }
         if(Text.isBlank(referer)) {
             logger.error("unexpected wechat authorize request referer is blank");
             context.set("msg", "微信授权请求所在页面地址为空");
