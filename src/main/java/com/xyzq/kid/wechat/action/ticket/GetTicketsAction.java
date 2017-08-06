@@ -1,12 +1,19 @@
 package com.xyzq.kid.wechat.action.ticket;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.google.gson.Gson;
+import com.xyzq.kid.logic.ticket.entity.TicketEntity;
 import com.xyzq.kid.logic.ticket.service.TicketService;
 import com.xyzq.kid.wechat.action.member.WechatUserAjaxAction;
-import com.xyzq.simpson.base.json.JSONObject;
 import com.xyzq.simpson.maggie.access.spring.MaggieAction;
 import com.xyzq.simpson.maggie.framework.Context;
 import com.xyzq.simpson.maggie.framework.Visitor;
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * 增票
@@ -19,7 +26,7 @@ public class GetTicketsAction extends WechatUserAjaxAction {
     @Autowired
     private TicketService ticketService;
 
-
+    Gson gson=new Gson();
     /**
      * 动作执行
      *
@@ -30,8 +37,24 @@ public class GetTicketsAction extends WechatUserAjaxAction {
     @Override
     public String doExecute(Visitor visitor, Context context) throws Exception {
         String mobileNo = (String) context.get(CONTEXT_KEY_MOBILENO);
-
-        context.set("data", JSONObject.convertFromObject(ticketService.getTicketsInfoByOwnerMobileNo(mobileNo)));
+        
+        List<Map<String,Object>> mapList=new ArrayList<>();
+        List<TicketEntity> ticketList=ticketService.getTicketsInfoByOwnerMobileNo(mobileNo);
+        if(ticketList!=null&&ticketList.size()>0){
+        	 for(TicketEntity ticket:ticketList){
+             	Map<String,Object> map=new HashMap<>();
+             	map.put("id",ticket.id);
+             	map.put("serialNumber", ticket.serialNumber);
+             	map.put("type", ticket.type);
+             	map.put("price", ticket.price);
+             	map.put("purchaser", ticket.payeropenid);
+             	map.put("owner", ticket.telephone);
+             	map.put("expire", ticket.expire);
+             	map.put("status", ticket.status);
+             	mapList.add(map);
+             }
+        }
+        context.set("data", gson.toJson(mapList));
         return "success.json";
     }
 }
