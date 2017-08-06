@@ -42,7 +42,7 @@ public class SubmitBooking extends WechatUserAjaxAction {
 
 	@Override
 	public String doExecute(Visitor visitor, Context context) throws Exception {
-		context.set("code", "-9");
+		context.set("code", -9);
 		String mobileNo=(String)context.get(CONTEXT_KEY_MOBILENO);
 		UserEntity user=userService.selectByMolieNo(mobileNo);
 		String serialNumber=(String)context.parameter("serialNumber");
@@ -64,13 +64,13 @@ public class SubmitBooking extends WechatUserAjaxAction {
 					if(type.equals("0")){//预约提交
 						if(bookService.createBook(serialNumber, repo.getId(), user.id)){
 							ticketService.useTickets(ticket.id);//票状态更新为已使用
-							context.set("code", "0");
+							context.set("code", 0);
 						}
 					}else if(type.equals("1")){//改期提交
 						Book book=bookService.queryBookRecByTicketId(ticket.id);
 						if(book!=null){
 							if(bookChangeRequestService.createRequest(book.getId(), "1", null, user.id, repo.getId(),"1")){
-								context.set("code", "0");
+								context.set("code", 0);
 							}
 						}
 					}

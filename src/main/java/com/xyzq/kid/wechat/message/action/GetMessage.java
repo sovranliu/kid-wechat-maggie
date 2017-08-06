@@ -35,7 +35,7 @@ public class GetMessage extends WechatUserAjaxAction {
 		if(msg!=null){
 			map.put("content", msg.getAnswer());
 		}
-		context.set("0", "0");
+		context.set("0", 0);
 		context.set("data", gson.toJson(map));
 		return "success.json";
 	}
