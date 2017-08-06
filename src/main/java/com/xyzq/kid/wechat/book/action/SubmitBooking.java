@@ -52,6 +52,7 @@ public class SubmitBooking extends WechatUserAjaxAction {
 		String start=(String)context.parameter("start");
 		String end=(String)context.parameter("end");
 		String type=(String)context.parameter("type");//0：预约提交，1：预约改期
+		System.out.println("SerialNumber:"+serialNumber+" --"+"year:"+year+" --"+"month:"+month+" --"+" day"+day+" -- start:"+start+" --end:"+end+" --type:"+type);
 		TicketEntity ticket=ticketService.getTicketsInfoBySerialno(serialNumber);
 		if(!StringUtils.isNullOrEmpty(year)&&!StringUtils.isNullOrEmpty(month)&&!StringUtils.isNullOrEmpty(day)){
 			String bookDate=year+"-"+month+"-"+day;
