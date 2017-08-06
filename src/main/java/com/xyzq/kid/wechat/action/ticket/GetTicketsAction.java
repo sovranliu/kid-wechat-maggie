@@ -43,6 +43,12 @@ public class GetTicketsAction extends WechatUserAjaxAction {
         if(ticketList!=null&&ticketList.size()>0){
         	 for(TicketEntity ticket:ticketList){
              	Map<String,Object> map=new HashMap<>();
+                 int count = ticketService.queryTickethandselCount(ticket.id);
+                 if(count > 0) {
+                     map.put("isGive", false);
+                 } else {
+                     map.put("isGive", true);
+                 }
              	map.put("id",ticket.id);
              	map.put("serialNumber", ticket.serialNumber);
              	map.put("type", ticket.type);

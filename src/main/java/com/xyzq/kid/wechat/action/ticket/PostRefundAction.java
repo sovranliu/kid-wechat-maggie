@@ -39,10 +39,10 @@ public class PostRefundAction extends WechatUserAjaxAction {
         TicketEntity ticketEntity = ticketService.getTicketsInfoBySerialno(serialNumber);
         TicketRefundEntity ticketRefundEntity = new TicketRefundEntity();
         if(null != ticketEntity) {
-            ticketRefundEntity.deleted = CommonTool.STATUS_NORMAL;
-            ticketRefundEntity.status = TicketRefundEntity.REFUND_STATUS_NEW;
-            ticketRefundEntity.ticketid = ticketEntity.id;
-            ticketService.insertRefundSelective(ticketRefundEntity);
+            String result = ticketService.refundingTickets(ticketEntity.id);
+            if(!"success".equals(result)) {
+                context.set("code", -1);
+            }
         }
 
         return "success.json";
