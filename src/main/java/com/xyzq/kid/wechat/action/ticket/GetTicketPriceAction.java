@@ -1,14 +1,17 @@
 package com.xyzq.kid.wechat.action.ticket;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.google.gson.Gson;
+import com.xyzq.kid.logic.config.common.ConfigCommon;
 import com.xyzq.kid.logic.config.service.ConfigService;
-import com.xyzq.simpson.base.json.JSONObject;
 import com.xyzq.simpson.maggie.access.spring.MaggieAction;
 import com.xyzq.simpson.maggie.framework.Context;
 import com.xyzq.simpson.maggie.framework.Visitor;
 import com.xyzq.simpson.maggie.framework.action.core.IAction;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.Map;
 
 /**
  * 范例动作
@@ -20,7 +23,8 @@ public class GetTicketPriceAction implements IAction {
      */
     @Autowired
     private ConfigService configService;
-
+    
+    Gson gson=new Gson();
 
     /**
      * 动作执行
@@ -32,8 +36,14 @@ public class GetTicketPriceAction implements IAction {
     @Override
     public String execute(Visitor visitor, Context context) throws Exception {
         Map result = configService.getPriceInfo();
-        if(null != result) {
-            context.set("data", JSONObject.convertFromTable(result));
+        Map<String,Object> map=new HashMap<>();
+        if(result!=null&&result.size()>0){
+        	map.put("single", map.get(ConfigCommon.FEE_SINGLETICKET));
+        	map.put("group", map.get(ConfigCommon.FEE_GROUPTICKET));
+        	map.put("refundInsurance", map.get(ConfigCommon.FEE_INSURANCE));
+        }
+        if(null != map) {
+            context.set("data", gson.toJson(map));
         }
         return "success.json";
     }

@@ -1,14 +1,14 @@
 package com.xyzq.kid.wechat.action.member;
 
+
+import java.util.Date;
+import org.springframework.beans.factory.annotation.Autowired;
 import com.xyzq.kid.CommonTool;
 import com.xyzq.kid.logic.user.entity.UserEntity;
 import com.xyzq.kid.logic.user.service.UserService;
 import com.xyzq.simpson.maggie.access.spring.MaggieAction;
 import com.xyzq.simpson.maggie.framework.Context;
 import com.xyzq.simpson.maggie.framework.Visitor;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.Date;
 
 /**
  * 范例动作
@@ -31,6 +31,7 @@ public class PostUserInfoAction extends WechatUserAjaxAction {
      */
     @Override
     public String doExecute(Visitor visitor, Context context) throws Exception {
+
         UserEntity userEntity = new UserEntity();
         userEntity.telephone = (String) context.get(WechatUserAjaxAction.CONTEXT_KEY_MOBILENO);
         userEntity.userName = (String)context.parameter("userName");
