@@ -37,7 +37,7 @@ public class ＧetRefundAction extends WechatUserAjaxAction {
     @Override
     public String doExecute(Visitor visitor, Context context) throws Exception {
 
-        String serialNumber = (String) context.parameter("serialNumber", -1);
+        String serialNumber = (String) context.parameter("serialNumber");
         TicketEntity ticketEntity = ticketService.getTicketsInfoBySerialno(serialNumber);
         TicketRefundEntity ticketRefundEntity =ticketService.loadRefundByTicketId(ticketEntity.id);
         Map<String,Object> map=new HashMap<>();
