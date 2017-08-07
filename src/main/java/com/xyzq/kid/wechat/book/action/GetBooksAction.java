@@ -2,13 +2,7 @@ package com.xyzq.kid.wechat.book.action;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -91,7 +85,7 @@ public class GetBooksAction extends WechatUserAjaxAction{
 				}
 			}
 		}
-		mapList.sort(c);
+		Collections.sort(mapList, c);
 		context.set("code", 0);
 		context.set("data", gson.toJson(mapList));
 		return "success.json";
