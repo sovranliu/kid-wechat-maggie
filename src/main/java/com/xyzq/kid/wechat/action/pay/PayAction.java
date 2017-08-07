@@ -45,7 +45,12 @@ public class PayAction implements IAction {
      */
     @Override
     public String execute(Visitor visitor, Context context) throws Exception {
-        int goodsType = (Integer) context.parameter("goodsType", Integer.class);
+        int goodsType = (Integer) context.parameter("goodsType", 0);
+        if(0 == goodsType) {
+            logger.error("empty goods type");
+            context.set("msg", "商品类型为空");
+            return "fail.json";
+        }
         int fee = goodsTypeService.calculateFee(goodsType);
         if(0 == fee) {
             logger.error("invalid goods type : " + goodsType);
