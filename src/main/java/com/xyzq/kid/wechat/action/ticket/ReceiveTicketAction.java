@@ -42,7 +42,8 @@ public class ReceiveTicketAction extends WechatUserAjaxAction {
     @Override
     public String doExecute(Visitor visitor, Context context) throws Exception {
         String serialNumber = (String) context.parameter("serialNumber");
-        String mobileNo = (String) context.parameter("mobileNo");
+        String mobileNo = String.valueOf(context.get(CONTEXT_KEY_MOBILENO));
+//        String mobileNo = (String) context.parameter("mobileNo");
         logger.info("[kid/wechat/receiveTicket]-in[serialNumber:" + serialNumber + "], [mobileNo:" + mobileNo + "]");
 
         Map<String,Object> map=new HashMap<>();
