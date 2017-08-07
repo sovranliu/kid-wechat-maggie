@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.google.gson.Gson;
@@ -26,6 +28,11 @@ public class GetTicketsAction extends WechatUserAjaxAction {
     @Autowired
     private TicketService ticketService;
 
+    /**
+     * 日志对象
+     */
+    public static Logger logger = LoggerFactory.getLogger(GetTicketsAction.class);
+
     Gson gson=new Gson();
     /**
      * 动作执行
@@ -37,7 +44,9 @@ public class GetTicketsAction extends WechatUserAjaxAction {
     @Override
     public String doExecute(Visitor visitor, Context context) throws Exception {
         String mobileNo = (String) context.get(CONTEXT_KEY_MOBILENO);
-        
+
+        logger.info("[kid/wechat/getTickets]-in:" + mobileNo);
+
         List<Map<String,Object>> mapList=new ArrayList<>();
         List<TicketEntity> ticketList=ticketService.getTicketsInfoByOwnerMobileNo(mobileNo);
         if(ticketList!=null&&ticketList.size()>0){
@@ -61,6 +70,8 @@ public class GetTicketsAction extends WechatUserAjaxAction {
              }
         }
         context.set("data", gson.toJson(mapList));
+        logger.info("[kid/wechat/getTickets]-out:" + gson.toJson(mapList));
+
         return "success.json";
     }
 }

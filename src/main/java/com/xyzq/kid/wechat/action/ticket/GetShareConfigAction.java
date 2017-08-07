@@ -8,12 +8,19 @@ import com.xyzq.simpson.base.json.JSONString;
 import com.xyzq.simpson.maggie.access.spring.MaggieAction;
 import com.xyzq.simpson.maggie.framework.Context;
 import com.xyzq.simpson.maggie.framework.Visitor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 飞行票分享动作
  */
 @MaggieAction(path = "kid/wechat/getShareConfig")
 public class GetShareConfigAction extends WechatUserAjaxAction {
+    /**
+     * 日志对象
+     */
+    public static Logger logger = LoggerFactory.getLogger(GetShareConfigAction.class);
+
     /**
      * 派生类动作执行
      *
@@ -31,6 +38,7 @@ public class GetShareConfigAction extends WechatUserAjaxAction {
             context.set("msg", "网页Referer意外为空");
             return "fail.json";
         }
+        logger.info("[kid/wechat/getShareConfig]-in:" + referer);
         JSConfig jsConfig = JSHelper.fetchConfig(referer);
         JSONObject json = new JSONObject();
         json.put("appId", new JSONString(jsConfig.appId));
@@ -38,6 +46,8 @@ public class GetShareConfigAction extends WechatUserAjaxAction {
         json.put("nonceStr", new JSONString(jsConfig.nonceString));
         json.put("signature", new JSONString(jsConfig.signature));
         context.set("data", json);
+        logger.info("[kid/wechat/getShareConfig]-json:" + json);
+
         return "success.json";
     }
 }

@@ -3,6 +3,8 @@ package com.xyzq.kid.wechat.action.ticket;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.google.gson.Gson;
@@ -23,6 +25,11 @@ public class GetTicketPriceAction implements IAction {
      */
     @Autowired
     private ConfigService configService;
+
+    /**
+     * 日志对象
+     */
+    public static Logger logger = LoggerFactory.getLogger(GetTicketPriceAction.class);
     
     Gson gson=new Gson();
 
@@ -45,6 +52,7 @@ public class GetTicketPriceAction implements IAction {
         if(null != map) {
             context.set("data", gson.toJson(map));
         }
+        logger.info("[kid/wechat/getTicketPrice]-out:" + gson.toJson(map));
         return "success.json";
     }
 }

@@ -8,6 +8,8 @@ import com.xyzq.kid.wechat.action.member.WechatUserAjaxAction;
 import com.xyzq.simpson.maggie.access.spring.MaggieAction;
 import com.xyzq.simpson.maggie.framework.Context;
 import com.xyzq.simpson.maggie.framework.Visitor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.HashMap;
@@ -24,6 +26,11 @@ public class ReceiveTicketAction extends WechatUserAjaxAction {
     @Autowired
     private TicketService ticketService;
 
+    /**
+     * 日志对象
+     */
+    public static Logger logger = LoggerFactory.getLogger(ReceiveTicketAction.class);
+
     Gson gson=new Gson();
     /**
      * 动作执行
@@ -36,6 +43,7 @@ public class ReceiveTicketAction extends WechatUserAjaxAction {
     public String doExecute(Visitor visitor, Context context) throws Exception {
         String serialNumber = (String) context.parameter("serialNumber");
         String mobileNo = (String) context.parameter("mobileNo");
+        logger.info("[kid/wechat/receiveTicket]-in[serialNumber:" + serialNumber + "], [mobileNo:" + mobileNo + "]");
 
         Map<String,Object> map=new HashMap<>();
         TicketEntity ticketEntity = ticketService.getTicketsInfoBySerialno(serialNumber);
@@ -56,11 +64,15 @@ public class ReceiveTicketAction extends WechatUserAjaxAction {
         map.put("payerMobileNo", ticketEntity.telephone);
         map.put("payerName", userEntityOld.userName);
 
-        if(!"success".equals(ticketService.handselTickets(ticketEntity.id, mobileNo, ticketEntity.telephone))) {
+        String result = ticketService.handselTickets(ticketEntity.id, mobileNo, ticketEntity.telephone);
+        if(!"success".equals(result)) {
+            context.set("msg", result);
             map.put("result", false);
         } else {
             map.put("result", true);
         }
+
+        logger.info("[kid/wechat/receiveTicket]-out[" + gson.toJson(map) + "]");
 
         context.set("data", gson.toJson(map));
         return "success.json";

@@ -8,6 +8,8 @@ import com.xyzq.kid.wechat.action.member.WechatUserAjaxAction;
 import com.xyzq.simpson.maggie.access.spring.MaggieAction;
 import com.xyzq.simpson.maggie.framework.Context;
 import com.xyzq.simpson.maggie.framework.Visitor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
@@ -26,6 +28,11 @@ public class ＧetRefundAction extends WechatUserAjaxAction {
     @Autowired
     private TicketService ticketService;
 
+    /**
+     * 日志对象
+     */
+    public static Logger logger = LoggerFactory.getLogger(ＧetRefundAction.class);
+
     Gson gson=new Gson();
     /**
      * 动作执行
@@ -38,6 +45,7 @@ public class ＧetRefundAction extends WechatUserAjaxAction {
     public String doExecute(Visitor visitor, Context context) throws Exception {
 
         String serialNumber = (String) context.parameter("serialNumber");
+        logger.info("[kid/wechat/getRefund]-in:" + serialNumber);
         TicketEntity ticketEntity = ticketService.getTicketsInfoBySerialno(serialNumber);
         TicketRefundEntity ticketRefundEntity =ticketService.loadRefundByTicketId(ticketEntity.id);
         Map<String,Object> map=new HashMap<>();
@@ -46,6 +54,7 @@ public class ＧetRefundAction extends WechatUserAjaxAction {
             map.put("price", ticketEntity.price);
             map.put("serialNumber", ticketEntity.serialNumber);
         }
+        logger.info("[kid/wechat/getRefund]-out:" + gson.toJson(map));
 
         context.set("data", gson.toJson(map));
         return "success.json";
