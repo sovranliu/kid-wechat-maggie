@@ -1,6 +1,7 @@
 package com.xyzq.kid.wechat.action.ticket;
 
 import com.google.gson.Gson;
+import com.xyzq.kid.logic.config.service.GoodsTypeService;
 import com.xyzq.kid.logic.ticket.entity.TicketEntity;
 import com.xyzq.kid.logic.ticket.entity.TicketRefundEntity;
 import com.xyzq.kid.logic.ticket.service.TicketService;
@@ -27,6 +28,8 @@ public class ＧetRefundAction extends WechatUserAjaxAction {
      */
     @Autowired
     private TicketService ticketService;
+    @Autowired
+    private GoodsTypeService goodsTypeService;
 
     /**
      * 日志对象
@@ -47,11 +50,19 @@ public class ＧetRefundAction extends WechatUserAjaxAction {
         String serialNumber = (String) context.parameter("serialNumber");
         logger.info("[kid/wechat/getRefund]-in:" + serialNumber);
         TicketEntity ticketEntity = ticketService.getTicketsInfoBySerialno(serialNumber);
-        TicketRefundEntity ticketRefundEntity =ticketService.loadRefundByTicketId(ticketEntity.id);
+//        TicketRefundEntity ticketRefundEntity = ticketService.loadRefundByTicketId(ticketEntity.id);
         Map<String,Object> map=new HashMap<>();
-        if(null != ticketRefundEntity) {
+        if(null != ticketEntity) {
+            if(ticketEntity.insurance == true) {
+                map.put("price", ticketEntity.price);
+                map.put("isInsurance", true);
+            } else {
+                int price = ticketEntity.price.intValue()/100;
+                map.put("price", price * 70);
+                map.put("isInsurance", false);
+            }
+
             map.put("expire", ticketEntity.expire);
-            map.put("price", ticketEntity.price);
             map.put("serialNumber", ticketEntity.serialNumber);
         }
         logger.info("[kid/wechat/getRefund]-out:" + gson.toJson(map));
