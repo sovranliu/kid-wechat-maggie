@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -12,7 +13,6 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.google.gson.Gson;
-import com.xyzq.kid.wechat.action.member.WechatUserAjaxAction;
 import com.xyzq.kid.logic.book.dao.po.Book;
 import com.xyzq.kid.logic.book.dao.po.BookTimeRepository;
 import com.xyzq.kid.logic.book.dao.po.BookTimeSpan;
@@ -21,6 +21,7 @@ import com.xyzq.kid.logic.book.service.BookService;
 import com.xyzq.kid.logic.book.service.BookTimeSpanService;
 import com.xyzq.kid.logic.ticket.entity.TicketEntity;
 import com.xyzq.kid.logic.ticket.service.TicketService;
+import com.xyzq.kid.wechat.action.member.WechatUserAjaxAction;
 import com.xyzq.simpson.maggie.access.spring.MaggieAction;
 import com.xyzq.simpson.maggie.framework.Context;
 import com.xyzq.simpson.maggie.framework.Visitor;
@@ -90,10 +91,25 @@ public class GetBooksAction extends WechatUserAjaxAction{
 				}
 			}
 		}
+		mapList.sort(c);
 		context.set("code", 0);
 		context.set("data", gson.toJson(mapList));
 		return "success.json";
 	}
+	
+	static Comparator<Map<String,Object>> c=new Comparator<Map<String,Object>>() {
+		@Override
+		public int compare(Map<String, Object> o1,
+				Map<String, Object> o2) {
+			if((Integer)o1.get("status")<(Integer)o2.get("status")){
+				return -1;
+			}else{
+				return 1;
+			}
+		}
+	};
+	
+	
 	/**
 	 * 验证预约时间是否已过期
 	 * @param bookDate
@@ -111,36 +127,45 @@ public class GetBooksAction extends WechatUserAjaxAction{
 			e.printStackTrace();
 		}
 		
-//		System.out.println(sdf.format(bookCalendar.getTime()));
-		
 		Calendar todayCalendar=Calendar.getInstance();
 		todayCalendar.setTime(new Date());
 		todayCalendar.set(Calendar.HOUR_OF_DAY, 23);
 		todayCalendar.set(Calendar.MINUTE, 59);
 		todayCalendar.set(Calendar.SECOND, 59);
 		
-//		System.out.println(sdf.format(todayCalendar.getTime()));
 		if(bookCalendar.before(todayCalendar)){
 			return true;
 		}else{
 			return false;
 		}
 	}
-	public static void main(String[] args) {
-//		Gson gson=new Gson();
-//		List<Map<String,String>> mapList=new ArrayList<>();
-//		Map<String,String> bookMap=new HashMap<>();
-//		for(int i=0;i<5;i++){
-//			bookMap.put("status", String.valueOf(i));
-//			bookMap.put("expire", "2017-08-20");
-//			bookMap.put("serialNumber", String.valueOf(i+1));
-//			mapList.add(bookMap);
+	
+//	public static void main(String[] args) {
+//		List<Map<String,Object>> list=new ArrayList<>();
+//		Map<String,Object> map1=new HashMap<>();
+//		map1.put("status", 2);
+//		map1.put("other", "test2");
+//		list.add(map1);
+//		Map<String,Object> map2=new HashMap<>();
+//		map2.put("status", 0);
+//		map2.put("other", "test1");
+//		list.add(map2);
+//		Map<String,Object> map3=new HashMap<>();
+//		map3.put("status", 0);
+//		map3.put("other", "test3");
+//		list.add(map3);
+//		Map<String,Object> map4=new HashMap<>();
+//		map4.put("status", 1);
+//		map4.put("other", "test1");
+//		list.add(map4);
+//		Map<String,Object> map5=new HashMap<>();
+//		map5.put("status", 5);
+//		map5.put("other", "test3");
+//		list.add(map5);
+//		list.sort(c);
+//		for(int i=0;i<list.size();i++){
+//			Map<String,Object> map=list.get(i);
+//			System.out.println("status:"+map.get("status")+"--other:"+map.get("other"));
 //		}
-//		System.out.println(gson.toJson(mapList));
-		if(!checkExpire("2017-3-20")){
-			System.out.println("过期");
-		}else{
-			System.out.println("有效");
-		}
-	}
+//	}
 }
