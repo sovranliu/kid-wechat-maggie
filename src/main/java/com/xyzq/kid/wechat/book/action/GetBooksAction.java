@@ -4,6 +4,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import com.xyzq.simpson.base.text.Text;
+import com.xyzq.simpson.base.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.google.gson.Gson;
@@ -51,7 +53,7 @@ public class GetBooksAction extends WechatUserAjaxAction{
 					bookMap.put("id", book.getId());
 					String bookStatus=book.getBookstatus();//1：已预约，2：改期申请中，3：改期通过，4：改期拒绝，5：核销完成，6：撤销申请中，7：撤销通过，8：拒绝撤销
 					Integer status=0;//0：已预约 1：已过期 2：已核销 3：改期审核中 4：已撤销 5：撤销申请中
-					if(checkExpire(book.getBookdate())){
+					if(checkExpire(book.getBookdate(), book.getBooktime())){
 						status=1;
 					}else{
 						if(bookStatus.equals("1")||bookStatus.equals("3")||bookStatus.equals("4")||bookStatus.equals("8")){
@@ -106,31 +108,26 @@ public class GetBooksAction extends WechatUserAjaxAction{
 	
 	/**
 	 * 验证预约时间是否已过期
+	 *
 	 * @param bookDate
+	 * @param bookTime
 	 * @return
 	 */
-	private static boolean checkExpire(String bookDate){
-		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		
-		Calendar bookCalendar=Calendar.getInstance();
-		String[] dates=bookDate.split("-");
-		try {
-			Date d=sdf.parse(dates[0]+"-"+dates[1]+"-"+dates[2]+" 00:00:00");
-			bookCalendar.setTime(d);;
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-		
-		Calendar todayCalendar=Calendar.getInstance();
-		todayCalendar.setTime(new Date());
-		todayCalendar.set(Calendar.HOUR_OF_DAY, 23);
-		todayCalendar.set(Calendar.MINUTE, 59);
-		todayCalendar.set(Calendar.SECOND, 59);
-		
-		if(bookCalendar.before(todayCalendar)){
+	private static boolean checkExpire(String bookDate, String bookTime){
+		bookTime = Text.substring(bookTime, null, "-");
+		if(null == bookTime) {
+			logger.error("parse date and time failed, string = " + bookDate + " " + bookTime);
 			return true;
-		}else{
-			return false;
+		}
+		bookTime = bookTime.trim() + ":00";
+		String timeString = bookDate + " " + bookTime;
+		try {
+			DateTime dateTime = DateTime.parse(timeString);
+			return (dateTime.compareTo(DateTime.now())) < 0;
+		}
+		catch (ParseException e) {
+			logger.error("parse date failed, string = " + timeString, e);
+			return true;
 		}
 	}
 	
