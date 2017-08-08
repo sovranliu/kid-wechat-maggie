@@ -1,5 +1,6 @@
 package com.xyzq.kid.wechat.action.ticket;
 
+import com.xyzq.kid.CommonTool;
 import com.xyzq.kid.logic.ticket.entity.TicketEntity;
 import com.xyzq.kid.logic.ticket.service.TicketService;
 import com.xyzq.kid.wechat.action.member.WechatUserAjaxAction;
@@ -42,7 +43,7 @@ public class GiveTicketAction extends WechatUserAjaxAction {
         TicketEntity ticketEntity = ticketService.getTicketsInfoBySerialno(serialNumber);
         String mobileNo = (String)context.parameter("phone");
 
-        String result = ticketService.handselTickets(ticketEntity.id, mobileNo, ticketEntity.telephone);
+        String result = ticketService.handselTickets(ticketEntity.id, mobileNo, ticketEntity.telephone, CommonTool.HANDLE_GIVE);
         if(!"success".equals(result)) {
             context.set("msg", result);
             context.set("code", -1);

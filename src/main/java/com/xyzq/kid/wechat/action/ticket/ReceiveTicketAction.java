@@ -1,6 +1,7 @@
 package com.xyzq.kid.wechat.action.ticket;
 
 import com.google.gson.Gson;
+import com.xyzq.kid.CommonTool;
 import com.xyzq.kid.logic.ticket.entity.TicketEntity;
 import com.xyzq.kid.logic.ticket.service.TicketService;
 import com.xyzq.kid.logic.user.entity.UserEntity;
@@ -65,9 +66,10 @@ public class ReceiveTicketAction extends WechatUserAjaxAction {
         map.put("payerMobileNo", ticketEntity.telephone);
         map.put("payerName", userEntityOld.userName);
 
-        String result = ticketService.handselTickets(ticketEntity.id, mobileNo, ticketEntity.telephone);
+        String result = ticketService.handselTickets(ticketEntity.id, mobileNo, ticketEntity.telephone, CommonTool.HANDLE_RECEIVE);
         if(!"success".equals(result)) {
             context.set("msg", result);
+            context.set("code", -2);
             map.put("result", false);
         } else {
             map.put("result", true);
