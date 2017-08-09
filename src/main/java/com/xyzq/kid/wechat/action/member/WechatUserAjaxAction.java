@@ -1,6 +1,8 @@
 package com.xyzq.kid.wechat.action.member;
 
+import com.xyzq.kid.common.wechat.mp.UserInfoHelper;
 import com.xyzq.kid.common.wechat.mp.WebHelper;
+import com.xyzq.kid.common.wechat.utility.WechatConfig;
 import com.xyzq.kid.logic.user.entity.SessionEntity;
 import com.xyzq.kid.logic.user.service.UserService;
 import com.xyzq.simpson.base.json.JSONObject;
@@ -49,6 +51,8 @@ public abstract class WechatUserAjaxAction implements IAction {
     public String url_page_default;
     @Value("${KID.URL_PAGE_REGISTER}")
     public String url_page_register;
+    @Value("${KID.URL_PAGE_SUBSCIBE}")
+    public String url_page_subscibe;
     /**
      * 用户服务
      */
@@ -75,6 +79,13 @@ public abstract class WechatUserAjaxAction implements IAction {
         if(!Text.isBlank(sId)) {
             SessionEntity sessionEntity = userService.fetchSession(sId);
             if(null != sessionEntity) {
+                // 判断用户是否关注
+                if(!UserInfoHelper.isFans(sessionEntity.openId)) {
+                    context.set("redirect", url_page_subscibe);
+                    logger.info("wechat ajax " + visitor.ip() + " redirect to subscibe page");
+                    return "fail.json";
+                }
+                // 向上调用
                 context.put(CONTEXT_KEY_MOBILENO, sessionEntity.mobileNo);
                 context.put(CONTEXT_KEY_OPENID, sessionEntity.openId);
                 context.put(CONTEXT_KEY_SID, sId);
