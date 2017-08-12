@@ -1,11 +1,13 @@
 package com.xyzq.kid.wechat.book.action;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import com.xyzq.simpson.base.text.Text;
-import com.xyzq.simpson.base.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.google.gson.Gson;
@@ -18,6 +20,8 @@ import com.xyzq.kid.logic.book.service.BookTimeSpanService;
 import com.xyzq.kid.logic.ticket.entity.TicketEntity;
 import com.xyzq.kid.logic.ticket.service.TicketService;
 import com.xyzq.kid.wechat.action.member.WechatUserAjaxAction;
+import com.xyzq.simpson.base.text.Text;
+import com.xyzq.simpson.base.time.DateTime;
 import com.xyzq.simpson.maggie.access.spring.MaggieAction;
 import com.xyzq.simpson.maggie.framework.Context;
 import com.xyzq.simpson.maggie.framework.Visitor;
@@ -50,6 +54,8 @@ public class GetBooksAction extends WechatUserAjaxAction{
 				Book book=bookService.queryBookRecByTicketId(Integer.valueOf(ticket.id));
 				if(book!=null){
 					Map<String,Object> bookMap=new HashMap<>();
+					String type=ticket.type.equals("1")?"1":"0";//1:个人票，0：团体票
+					bookMap.put("type", type);
 					bookMap.put("id", book.getId());
 					String bookStatus=book.getBookstatus();//1：已预约，2：改期申请中，3：改期通过，4：改期拒绝，5：核销完成，6：撤销申请中，7：撤销通过，8：拒绝撤销
 					Integer status=0;//0：已预约 1：已过期 2：已核销 3：改期审核中 4：已撤销 5：撤销申请中
