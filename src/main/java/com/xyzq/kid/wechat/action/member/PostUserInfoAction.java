@@ -2,6 +2,8 @@ package com.xyzq.kid.wechat.action.member;
 
 
 import java.util.Date;
+
+import com.xyzq.kid.logic.ticket.service.TicketService;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.xyzq.kid.CommonTool;
 import com.xyzq.kid.logic.user.entity.UserEntity;
@@ -20,6 +22,8 @@ public class PostUserInfoAction extends WechatUserAjaxAction {
      */
     @Autowired
     private UserService userService;
+    @Autowired
+    private TicketService ticketService;
 
 
     /**
@@ -39,6 +43,15 @@ public class PostUserInfoAction extends WechatUserAjaxAction {
         userEntity.address = (String)context.parameter("address", "");
         userEntity.subscribetime = CommonTool.dataToStringYMDHMS(new Date());
         userService.updateByMobileNo(userEntity);
+
+        String telephoneNew = (String)context.parameter("telephone");
+        if(null != telephoneNew && telephoneNew.length() > 0 && !telephoneNew.equals(userEntity.telephone)) {
+            //更新用户手机号
+            userService.updateMobileNo(telephoneNew, userEntity.telephone);
+            //更新ticket表手机号
+            ticketService.updateMobileNo(telephoneNew, userEntity.telephone);
+        }
+
         return "success.json";
     }
 }
