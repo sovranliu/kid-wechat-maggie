@@ -90,11 +90,13 @@ public class FlightDiaryAction extends WechatUserAjaxAction {
 
 	private List<Map<String, Object>> transToMap(List<RecordEntity> entities, Context context) {
 		List<Map<String, Object>> maps = new ArrayList<Map<String, Object>>();
-		for (RecordEntity entity : entities) {
-			Map<String, Object> map = new HashMap<String, Object>();
-			map.put("id", String.valueOf(entity.id));
-			map.put("url", recordUploadUrl + "/" + entity.path);
-			maps.add(map);
+		if (entities != null && entities.size()>0) {
+			for (RecordEntity entity : entities) {
+				Map<String, Object> map = new HashMap<String, Object>();
+				map.put("id", String.valueOf(entity.id));
+				map.put("url", context.rootUrl() + entity.path);
+				maps.add(map);
+			}
 		}
 		return maps;
 	}
