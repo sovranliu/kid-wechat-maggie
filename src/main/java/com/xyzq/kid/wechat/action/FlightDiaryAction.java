@@ -70,7 +70,7 @@ public class FlightDiaryAction extends WechatUserAjaxAction {
 				List<String> serialNoList = new ArrayList<>();
 				serialNoList.add(serialNo);
 				List<RecordEntity> unPurchaseList = recordService.findBy(serialNoList, RecordEntity.UNPURCHASED);
-
+				//如果不存在视频，则不返回
 				if (unPurchaseList != null && unPurchaseList.size() > 0) {
 					Map<String, Object> map = new HashMap<>();
 					map.put("serialNo", serialNo);
