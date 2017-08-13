@@ -93,6 +93,7 @@ public abstract class WechatUserAjaxAction implements IAction {
             }
             else {
                 logger.info("session is empty, sid = " + sId);
+                visitor.setCookie("sid", null);
             }
         }
         String referer = context.header().get("Referer");
