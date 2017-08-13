@@ -56,7 +56,7 @@ public class PostUserInfoAction extends WechatUserAjaxAction {
             //更新用户手机号
             userService.updateMobileNo(telephoneNew, userEntity.telephone);
             //更新ticket表手机号
-            ticketService.updateMobileNo(telephoneNew, userEntity.telephone);
+//            ticketService.updateMobileNo(telephoneNew, userEntity.telephone);
         }
         return "success.json";
     }
