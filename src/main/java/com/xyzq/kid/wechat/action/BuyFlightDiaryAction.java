@@ -24,8 +24,6 @@ public class BuyFlightDiaryAction implements IAction {
 	 */
 	@Autowired
 	private RecordService recordService;
-	@Autowired
-	private TicketService ticketService;
 
 	/**
 	 * 动作执行
@@ -45,10 +43,8 @@ public class BuyFlightDiaryAction implements IAction {
 			context.set("msg", "飞行票对应的飞行日志文件不存在!");
 			return "success.json";
 		}
-		recordService.buyRecords(serialNo);
 
 		context.set("code", "0");
-		context.set("msg", "成功");
 		return "success.json";
 	}
 
