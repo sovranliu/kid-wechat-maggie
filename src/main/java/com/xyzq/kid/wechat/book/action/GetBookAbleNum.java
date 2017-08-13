@@ -42,7 +42,7 @@ public class GetBookAbleNum extends WechatUserAjaxAction {
 			BookTimeSpan bs=bookTimeSpanService.queryByTimeSpan(timeSpan);
 			if(bs!=null){
 				BookTimeRepository repo=bookRepositoryService.queryRepositoryByDateAndTimeSpan(bookDate, bs.getId());
-				bookAbleNum=String.valueOf(repo.getBookamount());
+				bookAbleNum=String.valueOf(repo.getBooktotal()-repo.getBookamount());
 			}
 			Map<String,String> map=new HashMap<>();
 			map.put("count", bookAbleNum);
