@@ -16,7 +16,6 @@ import com.xyzq.simpson.maggie.framework.Context;
 import com.xyzq.simpson.maggie.framework.Visitor;
 import com.xyzq.simpson.maggie.framework.action.core.IAction;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,11 +28,6 @@ import java.util.Map;
  */
 @MaggieAction(path = "kid/wechat/getFlightDiary")
 public class FlightDiaryAction extends WechatUserAjaxAction {
-	/**
-	 * 飞行日志上传后下载地址
-	 */
-	@Value("${KID.UPLOAD.URL.RECORD}")
-	private String recordUploadUrl;
 	/**
 	 * Action中只支持Autowired注解引入SpringBean
 	 */
@@ -69,7 +63,24 @@ public class FlightDiaryAction extends WechatUserAjaxAction {
 				usedTIcketSerialNoList.add(entity.serialNumber);
 			}
 		}
-		List<RecordEntity> canPurchaseList = recordService.findBy(usedTIcketSerialNoList, RecordEntity.UNPURCHASED);
+		List<Map<String, Object>> canPurchaseMapList = new ArrayList<Map<String, Object>>();
+		if (usedTIcketSerialNoList != null) {
+			//如果存在使用过的票，则分别查询每个票下面的未购买视频列表。
+			for (String serialNo : usedTIcketSerialNoList) {
+				List<String> serialNoList = new ArrayList<>();
+				serialNoList.add(serialNo);
+				List<RecordEntity> unPurchaseList = recordService.findBy(serialNoList, RecordEntity.UNPURCHASED);
+				//如果不存在视频，则不返回
+				if (unPurchaseList != null && unPurchaseList.size() > 0) {
+					Map<String, Object> map = new HashMap<>();
+					map.put("serialNo", serialNo);
+					map.put("records", transToMap(unPurchaseList, context));
+					canPurchaseMapList.add(map);
+				}
+
+			}
+		}
+//		List<RecordEntity> unPurchaseList = recordService.findBy(usedTIcketSerialNoList, RecordEntity.UNPURCHASED);
 		List<RecordEntity> hasPurchasedList = recordService.findBy(usedTIcketSerialNoList, RecordEntity.PURCHASED);
 		Integer price = Integer.valueOf(configService.fetch(ConfigCommon.FEE_RECORD));
 		Integer accumulateTime = Integer.valueOf(configService.fetch(ConfigCommon.TICKET_ACCUMULATE_TIME));
@@ -78,8 +89,10 @@ public class FlightDiaryAction extends WechatUserAjaxAction {
 		for (RecordEntity record : hasPurchasedList) {
 			hasPurchasedTicketSerialNoMap.put(record.serialNo, record.serialNo);
 		}
+
+
 		Map<String, Object> resultMap = new HashMap<>();
-		resultMap.put("canPurchase", transToMap(canPurchaseList, context));
+		resultMap.put("canPurchase", canPurchaseMapList);
 		resultMap.put("hasPurchased", transToMap(hasPurchasedList, context));
 		resultMap.put("timeDuration", usedTIcketSerialNoList == null ? 0 : usedTIcketSerialNoList.size() * accumulateTime);
 		resultMap.put("canPurchasePrice", usedTIcketSerialNoList == null ? 0 : (usedTIcketSerialNoList.size() - hasPurchasedTicketSerialNoMap.size()) * price);
@@ -90,7 +103,7 @@ public class FlightDiaryAction extends WechatUserAjaxAction {
 
 	private List<Map<String, Object>> transToMap(List<RecordEntity> entities, Context context) {
 		List<Map<String, Object>> maps = new ArrayList<Map<String, Object>>();
-		if (entities != null && entities.size()>0) {
+		if (entities != null && entities.size() > 0) {
 			for (RecordEntity entity : entities) {
 				Map<String, Object> map = new HashMap<String, Object>();
 				map.put("id", String.valueOf(entity.id));
@@ -100,4 +113,6 @@ public class FlightDiaryAction extends WechatUserAjaxAction {
 		}
 		return maps;
 	}
+
+
 }
