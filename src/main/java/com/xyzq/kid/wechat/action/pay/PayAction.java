@@ -4,6 +4,8 @@ import com.xyzq.kid.common.wechat.utility.WechatConfig;
 import com.xyzq.kid.finance.service.OrderService;
 import com.xyzq.kid.finance.service.entity.NewOrderEntity;
 import com.xyzq.kid.logic.config.service.GoodsTypeService;
+import com.xyzq.kid.logic.user.entity.UserEntity;
+import com.xyzq.kid.logic.user.service.UserService;
 import com.xyzq.simpson.base.json.JSONObject;
 import com.xyzq.simpson.base.json.JSONString;
 import com.xyzq.simpson.base.text.Text;
@@ -24,6 +26,11 @@ public class PayAction implements IAction {
      * 日志对象
      */
     protected static Logger logger = LoggerFactory.getLogger(PayAction.class);
+    /**
+     * 用户服务
+     */
+    @Autowired
+    private UserService userService;
     /**
      * 支付订单服务
      */
@@ -59,7 +66,7 @@ public class PayAction implements IAction {
         }
         String openId = (String) context.parameter("openId");
         if(Text.isBlank(openId)) {
-            logger.error("invalid goods type : " + goodsType);
+            logger.error("invalid open id : " + openId);
             context.set("msg", "微信用户开放ID为空");
             return "fail.json";
         }
@@ -69,9 +76,14 @@ public class PayAction implements IAction {
             context.set("msg", "购买者手机号码不能为空");
             return "fail.json";
         }
+        String ownerOpenId = openId;
+        UserEntity userEntity = userService.selectByMolieNo(mobileNo);
+        if(null != userEntity) {
+            ownerOpenId = userEntity.openid;
+        }
         String goodsTypeTitle = goodsTypeService.getGoodsTypeTitle(goodsType);
         String ip = visitor.ip();
-        NewOrderEntity newOrderEntity = orderService.createOrder(null, openId, goodsTypeTitle, goodsType, fee, ip, mobileNo);
+        NewOrderEntity newOrderEntity = orderService.createOrder(null, openId, goodsTypeTitle, goodsType, fee, ip, ownerOpenId);
         if(null == newOrderEntity) {
             logger.error("pay inner error, openId = " + openId + ", goodsType = " + goodsType + ", fee = " + fee + ", ip = " + ip + ", mobileNo = " + mobileNo);
             context.set("msg", "支付内部错误");

@@ -31,7 +31,7 @@ public class TestAction implements IAction {
      */
     @Override
     public String execute(Visitor visitor, Context context) throws Exception {
-        cache.set("sid-tester", "15021819287,ovQHwwFwTV4stCe3ncywvDrkDioI");
+        cache.set("sid-tester", "15021819287,ovQHwwFwTV4stCe3ncywvDrkDioI", 1000 * 60 * 30);
         visitor.setCookie("sid", "tester");
         context.set("msg", "测试连接，用户手机号码15021819287");
         return "success.json";

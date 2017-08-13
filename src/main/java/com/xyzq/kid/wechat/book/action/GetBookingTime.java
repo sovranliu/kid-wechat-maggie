@@ -30,6 +30,7 @@ public class GetBookingTime extends WechatUserAjaxAction {
 	
 	@Override
 	public String doExecute(Visitor visitor, Context context) throws Exception {
+
 		List<Map<String,String>> spanList=new ArrayList<>();
 		String year=(String)context.parameter("year");
 		String month=(String)context.parameter("month");
@@ -39,14 +40,16 @@ public class GetBookingTime extends WechatUserAjaxAction {
 			List<BookTimeRepository> repos=bookRepositoryService.queryRepositoryByDate(bookDate);
 			if(repos!=null&&repos.size()>0){
 				for(BookTimeRepository repo:repos){
-					Integer spanTimeId=repo.getBooktimespanid();
-					BookTimeSpan bs=bookTimeSpanService.queryByPrimaryKey(spanTimeId);
-					if(bs.getTimespan()!=null&&bs.getTimespan().contains("-")){
-						Map<String,String> map=new HashMap<>();
-						String[] times=bs.getTimespan().split("-");
-						map.put("start", times[0]);
-						map.put("end", times[1]);
-						spanList.add(map);
+					if(repo.getBooktotal()-repo.getBookamount()>0){
+						Integer spanTimeId=repo.getBooktimespanid();
+						BookTimeSpan bs=bookTimeSpanService.queryByPrimaryKey(spanTimeId);
+						if(bs.getTimespan()!=null&&bs.getTimespan().contains("-")){
+							Map<String,String> map=new HashMap<>();
+							String[] times=bs.getTimespan().split("-");
+							map.put("start", times[0]);
+							map.put("end", times[1]);
+							spanList.add(map);
+						}
 					}
 				}
 			}

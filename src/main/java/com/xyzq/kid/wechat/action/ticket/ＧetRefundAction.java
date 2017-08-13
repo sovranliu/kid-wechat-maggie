@@ -1,6 +1,8 @@
 package com.xyzq.kid.wechat.action.ticket;
 
 import com.google.gson.Gson;
+import com.xyzq.kid.logic.config.common.ConfigCommon;
+import com.xyzq.kid.logic.config.service.ConfigService;
 import com.xyzq.kid.logic.config.service.GoodsTypeService;
 import com.xyzq.kid.logic.ticket.entity.TicketEntity;
 import com.xyzq.kid.logic.ticket.entity.TicketRefundEntity;
@@ -29,7 +31,7 @@ public class ＧetRefundAction extends WechatUserAjaxAction {
     @Autowired
     private TicketService ticketService;
     @Autowired
-    private GoodsTypeService goodsTypeService;
+    private ConfigService configService;
 
     /**
      * 日志对象
@@ -54,10 +56,15 @@ public class ＧetRefundAction extends WechatUserAjaxAction {
         Map<String,Object> map=new HashMap<>();
         if(null != ticketEntity) {
             if(ticketEntity.insurance == true) {
-                map.put("price", ticketEntity.price);
+
+                Map<String, Integer> pricemap = configService.getPriceInfo();
+                int fee = Integer.valueOf(pricemap.get(ConfigCommon.FEE_INSURANCE).toString());
+                fee =  ticketEntity.price.intValue() - fee;
+
+                map.put("price", fee);
                 map.put("isInsurance", true);
             } else {
-                int price = ticketEntity.price.intValue()/100;
+                int price = (int) (ticketEntity.price.intValue() * 0.7);
                 map.put("price", price * 70);
                 map.put("isInsurance", false);
             }

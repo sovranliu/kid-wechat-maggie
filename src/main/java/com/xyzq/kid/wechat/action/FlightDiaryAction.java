@@ -16,6 +16,7 @@ import com.xyzq.simpson.maggie.framework.Context;
 import com.xyzq.simpson.maggie.framework.Visitor;
 import com.xyzq.simpson.maggie.framework.action.core.IAction;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,6 +29,11 @@ import java.util.Map;
  */
 @MaggieAction(path = "kid/wechat/getFlightDiary")
 public class FlightDiaryAction extends WechatUserAjaxAction {
+	/**
+	 * 飞行日志上传后下载地址
+	 */
+	@Value("${KID.UPLOAD.URL.RECORD}")
+	private String recordUploadUrl;
 	/**
 	 * Action中只支持Autowired注解引入SpringBean
 	 */
