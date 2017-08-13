@@ -1,5 +1,7 @@
 package com.xyzq.kid.wechat.action.member;
 
+import com.xyzq.kid.logic.user.entity.SessionEntity;
+import com.xyzq.kid.logic.user.entity.UserEntity;
 import com.xyzq.kid.logic.user.service.UserService;
 import com.xyzq.simpson.base.json.JSONObject;
 import com.xyzq.simpson.maggie.access.spring.MaggieAction;
@@ -29,7 +31,15 @@ public class GetUserInfoAction extends WechatUserAjaxAction {
     @Override
     public String doExecute(Visitor visitor, Context context) throws Exception {
         String mobileNo = (String) context.get(WechatUserAjaxAction.CONTEXT_KEY_MOBILENO);
-        context.set("data", JSONObject.convertFromObject(userService.selectByMolieNo(mobileNo)));
+        UserEntity userEntity = userService.selectByMolieNo(mobileNo);
+        if(null == userEntity) {
+            String openId = (String) context.get(WechatUserAjaxAction.CONTEXT_KEY_OPENID);
+            userEntity = userService.selectByOpenId(openId);
+            SessionEntity sessionEntity = userService.fetchSession(visitor.cookie("sid"));
+            sessionEntity.mobileNo = userEntity.telephone;
+            userService.saveSession(sessionEntity);
+        }
+        context.set("data", JSONObject.convertFromObject(userEntity));
         return "success.json";
     }
 }
