@@ -24,7 +24,7 @@ import java.util.Map;
  * 增票
  */
 @MaggieAction(path = "kid/wechat/getRefund")
-public class ＧetRefundAction extends WechatUserAjaxAction {
+public class GetRefundAction extends WechatUserAjaxAction {
     /**
      * Action中只支持Autowired注解引入SpringBean
      */
@@ -36,7 +36,7 @@ public class ＧetRefundAction extends WechatUserAjaxAction {
     /**
      * 日志对象
      */
-    public static Logger logger = LoggerFactory.getLogger(ＧetRefundAction.class);
+    public static Logger logger = LoggerFactory.getLogger(GetRefundAction.class);
 
     Gson gson=new Gson();
     /**
