@@ -3,9 +3,7 @@ package com.xyzq.kid.wechat.action.ticket;
 import com.google.gson.Gson;
 import com.xyzq.kid.logic.config.common.ConfigCommon;
 import com.xyzq.kid.logic.config.service.ConfigService;
-import com.xyzq.kid.logic.config.service.GoodsTypeService;
 import com.xyzq.kid.logic.ticket.entity.TicketEntity;
-import com.xyzq.kid.logic.ticket.entity.TicketRefundEntity;
 import com.xyzq.kid.logic.ticket.service.TicketService;
 import com.xyzq.kid.wechat.action.member.WechatUserAjaxAction;
 import com.xyzq.simpson.maggie.access.spring.MaggieAction;
@@ -15,9 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
