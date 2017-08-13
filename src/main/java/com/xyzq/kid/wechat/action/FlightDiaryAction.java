@@ -80,7 +80,7 @@ public class FlightDiaryAction extends WechatUserAjaxAction {
 
 			}
 		}
-		List<RecordEntity> unPurchaseList = recordService.findBy(usedTIcketSerialNoList, RecordEntity.UNPURCHASED);
+//		List<RecordEntity> unPurchaseList = recordService.findBy(usedTIcketSerialNoList, RecordEntity.UNPURCHASED);
 		List<RecordEntity> hasPurchasedList = recordService.findBy(usedTIcketSerialNoList, RecordEntity.PURCHASED);
 		Integer price = Integer.valueOf(configService.fetch(ConfigCommon.FEE_RECORD));
 		Integer accumulateTime = Integer.valueOf(configService.fetch(ConfigCommon.TICKET_ACCUMULATE_TIME));
