@@ -95,7 +95,7 @@ public class FlightDiaryAction extends WechatUserAjaxAction {
 		resultMap.put("canPurchase", canPurchaseMapList);
 		resultMap.put("hasPurchased", transToMap(hasPurchasedList, context));
 		resultMap.put("timeDuration", usedTIcketSerialNoList == null ? 0 : usedTIcketSerialNoList.size() * accumulateTime);
-		resultMap.put("canPurchasePrice", usedTIcketSerialNoList == null ? 0 : (usedTIcketSerialNoList.size() - hasPurchasedTicketSerialNoMap.size()) * price);
+		resultMap.put("canPurchasePrice", canPurchaseMapList == null ? 0 : canPurchaseMapList.size() * price);
 		context.set("code", "0");
 		context.set("data", JSONObject.convertFromTable(resultMap));
 		return "success.json";
