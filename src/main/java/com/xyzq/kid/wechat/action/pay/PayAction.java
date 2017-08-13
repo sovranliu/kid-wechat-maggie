@@ -83,7 +83,18 @@ public class PayAction implements IAction {
         }
         String goodsTypeTitle = goodsTypeService.getGoodsTypeTitle(goodsType);
         String ip = visitor.ip();
-        NewOrderEntity newOrderEntity = orderService.createOrder(null, openId, goodsTypeTitle, goodsType, fee, ip, ownerOpenId);
+        NewOrderEntity newOrderEntity = null;
+        if(goodsTypeService.isRecord(goodsType)) {
+            String serialNo = (String) context.parameter("serialNo");
+            if(Text.isBlank(serialNo)) {
+                context.set("msg", "请选择指定飞行票下的飞行日志进行购买");
+                return "fail.json";
+            }
+            newOrderEntity = orderService.createOrder(null, openId, goodsTypeTitle, goodsType, fee, ip, serialNo);
+        }
+        else {
+            newOrderEntity = orderService.createOrder(null, openId, goodsTypeTitle, goodsType, fee, ip, ownerOpenId);
+        }
         if(null == newOrderEntity) {
             logger.error("pay inner error, openId = " + openId + ", goodsType = " + goodsType + ", fee = " + fee + ", ip = " + ip + ", mobileNo = " + mobileNo);
             context.set("msg", "支付内部错误");
