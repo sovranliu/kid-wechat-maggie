@@ -64,7 +64,7 @@ public class ＧetRefundAction extends WechatUserAjaxAction {
                 map.put("price", fee);
                 map.put("isInsurance", true);
             } else {
-                int price = ticketEntity.price.intValue()/100;
+                int price = (int) (ticketEntity.price.intValue() * 0.7);
                 map.put("price", price * 70);
                 map.put("isInsurance", false);
             }
