@@ -1,10 +1,6 @@
-package com.xyzq.kid.wechat.action.User;
+package com.xyzq.kid.wechat.action.user;
 
 import com.google.gson.Gson;
-import com.xyzq.kid.CommonTool;
-import com.xyzq.kid.logic.ticket.entity.TicketEntity;
-import com.xyzq.kid.logic.ticket.service.TicketService;
-import com.xyzq.kid.logic.user.entity.UserEntity;
 import com.xyzq.kid.logic.user.service.UserService;
 import com.xyzq.kid.wechat.action.member.WechatUserAjaxAction;
 import com.xyzq.simpson.maggie.access.spring.MaggieAction;
