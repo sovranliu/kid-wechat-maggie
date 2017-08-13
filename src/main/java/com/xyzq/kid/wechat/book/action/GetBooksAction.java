@@ -54,7 +54,7 @@ public class GetBooksAction extends WechatUserAjaxAction{
 				Book book=bookService.queryBookRecByTicketId(Integer.valueOf(ticket.id));
 				if(book!=null){
 					Map<String,Object> bookMap=new HashMap<>();
-					int type=ticket.type.equals("1")?1:0;//1:个人票，0：团体票
+					int type=ticket.type.equals(1)?1:0;//1:个人票，0：团体票
 					bookMap.put("type", type);
 					bookMap.put("id", book.getId());
 					String bookStatus=book.getBookstatus();//1：已预约，2：改期申请中，3：改期通过，4：改期拒绝，5：核销完成，6：撤销申请中，7：撤销通过，8：拒绝撤销
