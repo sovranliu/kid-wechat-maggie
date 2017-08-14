@@ -16,6 +16,7 @@ import com.xyzq.simpson.maggie.framework.Context;
 import com.xyzq.simpson.maggie.framework.Visitor;
 import com.xyzq.simpson.maggie.framework.action.core.IAction;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,7 +38,11 @@ public class FlightDiaryAction extends WechatUserAjaxAction {
 	private TicketService ticketService;
 	@Autowired
 	private ConfigService configService;
-
+	/**
+	 * 飞行日志上传后下载地址
+	 */
+	@Value("${KID.UPLOAD.URL.RECORD}")
+	private String recordUploadUrl;
 	/**
 	 * 动作执行
 	 *
@@ -74,7 +79,7 @@ public class FlightDiaryAction extends WechatUserAjaxAction {
 				if (unPurchaseList != null && unPurchaseList.size() > 0) {
 					Map<String, Object> map = new HashMap<>();
 					map.put("serialNo", serialNo);
-					map.put("records", transToMap(unPurchaseList, context));
+					map.put("records", transToMap(unPurchaseList));
 					canPurchaseMapList.add(map);
 				}
 
@@ -93,21 +98,22 @@ public class FlightDiaryAction extends WechatUserAjaxAction {
 
 		Map<String, Object> resultMap = new HashMap<>();
 		resultMap.put("canPurchase", canPurchaseMapList);
-		resultMap.put("hasPurchased", transToMap(hasPurchasedList, context));
+		resultMap.put("hasPurchased", transToMap(hasPurchasedList));
 		resultMap.put("timeDuration", usedTIcketSerialNoList == null ? 0 : usedTIcketSerialNoList.size() * accumulateTime);
 		resultMap.put("canPurchasePrice", canPurchaseMapList == null ? 0 : canPurchaseMapList.size() * price);
+		resultMap.put("singlePrice", price);
 		context.set("code", "0");
 		context.set("data", JSONObject.convertFromTable(resultMap));
 		return "success.json";
 	}
 
-	private List<Map<String, Object>> transToMap(List<RecordEntity> entities, Context context) {
+	private List<Map<String, Object>> transToMap(List<RecordEntity> entities) {
 		List<Map<String, Object>> maps = new ArrayList<Map<String, Object>>();
 		if (entities != null && entities.size() > 0) {
 			for (RecordEntity entity : entities) {
 				Map<String, Object> map = new HashMap<String, Object>();
 				map.put("id", String.valueOf(entity.id));
-				map.put("url", context.rootUrl() + entity.path);
+				map.put("url", recordUploadUrl + "/" +  entity.path);
 				maps.add(map);
 			}
 		}
