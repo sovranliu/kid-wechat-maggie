@@ -1,6 +1,7 @@
 package com.xyzq.kid.wechat.action.member;
 
 import com.xyzq.kid.common.service.SMSService;
+import com.xyzq.kid.logic.user.service.UserService;
 import com.xyzq.simpson.maggie.access.spring.MaggieAction;
 import com.xyzq.simpson.maggie.framework.Context;
 import com.xyzq.simpson.maggie.framework.Visitor;
@@ -26,6 +27,11 @@ public class SendSMSAction implements IAction {
      */
     @Resource(name = "smsService")
     protected SMSService smsService;
+    /**
+     * 短信发送服务
+     */
+    @Resource(name = "userService")
+    protected UserService userService;
 
 
     /**
@@ -38,6 +44,12 @@ public class SendSMSAction implements IAction {
     @Override
     public String execute(Visitor visitor, Context context) throws Exception {
         String mobileNo = (String) context.parameter("mobileNo");
+        if(null != context.parameter("new")) {
+            if(null != userService.selectByMolieNo(mobileNo)) {
+                context.set("msg", "该手机号码已经存在");
+                return "fail.json";
+            }
+        }
         smsService.sendSMSCaptcha(mobileNo, "register", null);
         return "success.json";
     }
