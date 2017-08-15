@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -46,7 +47,7 @@ public class GetMaterielAction implements IAction {
 		logger.info("[kid/wechat/getMateriel]-in:categoryid[" + categoryid + "]");
 
 		List<Map<String,Object>> mapList=new ArrayList<>();
-
+		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
 		List<CMSEntity> cmsEntityList = cmsService.getCMSByCategoryid(categoryid);
 		if(null != cmsEntityList && cmsEntityList.size() > 0) {
 			for(CMSEntity cmsEntity : cmsEntityList) {
@@ -55,6 +56,7 @@ public class GetMaterielAction implements IAction {
 				map.put("content", cmsEntity.content);
 				map.put("imgUrl", cmsEntity.imageurl);
 				map.put("link", cmsEntity.link);
+				map.put("updatetime", sdf.format(cmsEntity.updatetime));
 				mapList.add(map);
 			}
 		}
