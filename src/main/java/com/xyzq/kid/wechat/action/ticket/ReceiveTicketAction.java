@@ -70,6 +70,9 @@ public class ReceiveTicketAction extends WechatUserAjaxAction {
         if(!"success".equals(result)) {
             context.set("msg", result);
             context.set("code", -2);
+
+            map.put("msg", result);
+            map.put("code", -2);
             map.put("result", false);
         } else {
             map.put("result", true);
