@@ -51,20 +51,22 @@ public class GetRefundAction extends WechatUserAjaxAction {
 //        TicketRefundEntity ticketRefundEntity = ticketService.loadRefundByTicketId(ticketEntity.id);
         Map<String,Object> map=new HashMap<>();
         if(null != ticketEntity) {
-            if(ticketEntity.insurance == true) {
+//            if(ticketEntity.insurance == true) {
+//
+//                Map<String, Integer> pricemap = configService.getPriceInfo();
+//                int fee = Integer.valueOf(pricemap.get(ConfigCommon.FEE_INSURANCE).toString());
+//                fee =  ticketEntity.price.intValue() - fee;
+//
+//                map.put("price", fee);
+//                map.put("isInsurance", true);
+//            } else {
+//                int price = (int) (ticketEntity.price.intValue() * 0.7);
+//                map.put("price", price);
+//                map.put("isInsurance", false);
+//            }
 
-                Map<String, Integer> pricemap = configService.getPriceInfo();
-                int fee = Integer.valueOf(pricemap.get(ConfigCommon.FEE_INSURANCE).toString());
-                fee =  ticketEntity.price.intValue() - fee;
-
-                map.put("price", fee);
-                map.put("isInsurance", true);
-            } else {
-                int price = (int) (ticketEntity.price.intValue() * 0.7);
-                map.put("price", price);
-                map.put("isInsurance", false);
-            }
-
+            map.put("price", ticketEntity.refundprice);
+            map.put("isInsurance", false);
             map.put("expire", ticketEntity.expire);
             map.put("serialNumber", ticketEntity.serialNumber);
         }
